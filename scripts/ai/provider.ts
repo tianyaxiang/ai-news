@@ -53,6 +53,6 @@ export function getModel(): LanguageModelV1 {
 
 export async function aiGenerate(prompt: string): Promise<string> {
   const model = getModel();
-  const { text } = await generateText({ model, prompt });
+  const { text } = await generateText({ model, prompt, maxTokens: 16000 });
   return text;
 }

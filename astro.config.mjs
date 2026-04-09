@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
-  site: 'https://ai-news.pages.dev',
+  site: 'https://d.newkit.site',
   output: 'static',
   adapter: cloudflare(),
 });

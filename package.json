@@ -18,6 +18,8 @@
     "astro": "^5.0.0",
     "cheerio": "^1.0.0",
     "dotenv": "^17.4.1",
+    "https-proxy-agent": "^9.0.0",
+    "node-fetch": "^3.3.2",
     "rss-parser": "^3.13.0"
   },
   "devDependencies": {

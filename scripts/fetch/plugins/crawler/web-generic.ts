@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import type { SourcePlugin, SourceConfig, Article } from '../../types.js';
+import { proxyFetch } from '../../../proxy.js';
 
 interface CrawlerOptions {
   /** CSS selector for article links (e.g. "article h2 a") */
@@ -29,7 +30,7 @@ const webGenericPlugin: SourcePlugin = {
     const selector = opts.selector ?? 'article a, .post a, h2 a, h3 a';
     const maxItems = config.maxItems ?? 10;
 
-    const res = await fetch(config.url, {
+    const res = await proxyFetch(config.url, {
       headers: { 'User-Agent': opts.userAgent ?? DEFAULT_UA },
     });
 

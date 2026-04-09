@@ -1,4 +1,5 @@
 import type { SourcePlugin, SourceConfig, Article } from '../../types.js';
+import { proxyFetch } from '../../../proxy.js';
 
 interface PHNode {
   id: string;
@@ -49,7 +50,7 @@ const producthuntPlugin: SourcePlugin = {
       }
     `;
 
-    const res = await fetch('https://api.producthunt.com/v2/api/graphql', {
+    const res = await proxyFetch('https://api.producthunt.com/v2/api/graphql', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

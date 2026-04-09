@@ -1,7 +1,6 @@
 import RSSParser from 'rss-parser';
 import type { SourcePlugin, SourceConfig, Article } from '../types.js';
-
-const parser = new RSSParser();
+import { proxyFetch } from '../../proxy.js';
 
 const rssPlugin: SourcePlugin = {
   name: 'rss',
@@ -12,7 +11,13 @@ const rssPlugin: SourcePlugin = {
       throw new Error(`RSS plugin requires a "url" in source config for "${config.name}"`);
     }
 
-    const feed = await parser.parseURL(config.url);
+    // Fetch XML via proxyFetch, then parse the string
+    const res = await proxyFetch(config.url);
+    if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${config.url}`);
+    const xml = await res.text();
+
+    const parser = new RSSParser();
+    const feed = await parser.parseString(xml);
     const maxItems = config.maxItems ?? 10;
 
     const articles: Article[] = feed.items

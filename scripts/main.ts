@@ -1,3 +1,5 @@
+import 'dotenv/config';
+import './proxy.js';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fetchAll } from './fetch/index.js';

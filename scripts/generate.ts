@@ -22,7 +22,7 @@ function groupBySource(results: FetchResult[]): Record<string, Article[]> {
 function buildFrontmatter(date: string): string {
   return `---
 title: "AI News Daily - ${date}"
-date: ${date}
+date: "${date}"
 ---
 
 `;
