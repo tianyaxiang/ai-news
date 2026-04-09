@@ -1,0 +1,53 @@
+{
+  "sources": [
+    {
+      "name": "Hacker News",
+      "type": "api",
+      "plugin": "hackernews",
+      "maxItems": 15,
+      "enabled": true,
+      "options": {
+        "storyType": "top"
+      }
+    },
+    {
+      "name": "TechCrunch",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://techcrunch.com/feed/",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "The Verge",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://www.theverge.com/rss/index.xml",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Ars Technica",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://feeds.arstechnica.com/arstechnica/index",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "Product Hunt",
+      "type": "api",
+      "plugin": "producthunt",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
+      "name": "MIT Technology Review",
+      "type": "rss",
+      "plugin": "rss",
+      "url": "https://www.technologyreview.com/feed/",
+      "maxItems": 10,
+      "enabled": true
+    }
+  ]
+}

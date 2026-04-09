@@ -1,0 +1,93 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const dailyPosts = await getCollection('daily');
+const sorted = dailyPosts.sort((a, b) => b.data.date.localeCompare(a.data.date));
+---
+
+<Layout title="AI News Daily - AI 新闻日报">
+  <section class="hero">
+    <h1>AI News Daily</h1>
+    <p class="subtitle">AI 驱动的每日科技新闻聚合，中英双语</p>
+    <p class="meta">Auto-generated from Hacker News, TechCrunch, The Verge, and more.</p>
+  </section>
+
+  {sorted.length === 0 ? (
+    <section class="empty">
+      <p>No daily reports yet. The first report will be generated automatically.</p>
+      <p>还没有日报。第一份日报将会自动生成。</p>
+    </section>
+  ) : (
+    <section class="post-list">
+      {sorted.map((post) => (
+        <a href={`/daily/${post.id}`} class="post-card">
+          <time datetime={post.data.date}>{post.data.date}</time>
+          <h2>{post.data.title}</h2>
+        </a>
+      ))}
+    </section>
+  )}
+</Layout>
+
+<style>
+  .hero {
+    margin-bottom: 2rem;
+  }
+
+  .hero h1 {
+    margin-top: 0;
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+  }
+
+  .meta {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--color-text-muted);
+  }
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .post-card {
+    display: block;
+    padding: 1rem 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+
+  .post-card:hover {
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .post-card time {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-family: monospace;
+  }
+
+  .post-card h2 {
+    font-size: 1rem;
+    color: var(--color-text);
+    margin: 0.25rem 0 0;
+    border: none;
+    padding: 0;
+  }
+</style>
