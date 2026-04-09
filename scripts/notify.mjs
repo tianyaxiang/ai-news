@@ -32,32 +32,33 @@ function buildPayload(type, status) {
     ? `AI News Daily · ${reportDate} 已生成`
     : `AI News Daily · ${reportDate} 生成失败`;
 
-  const lines = isSuccess
+  const dailyUrl = siteUrl ? `${siteUrl.replace(/\/$/, '')}/daily/${reportDate}` : '';
+
+  const textLines = isSuccess
     ? [
-        `### ${title}`,
+        title,
         ``,
-        `**日期 Date**: ${reportDate}`,
-        siteUrl ? `**查看 View**: [${siteUrl}](${siteUrl})` : '',
-        siteUrl ? `**今日日报**: [${siteUrl.replace(/\/$/, '')}/daily/${reportDate}](${siteUrl.replace(/\/$/, '')}/daily/${reportDate})` : '',
+        `日期: ${reportDate}`,
+        siteUrl ? `站点: ${siteUrl}` : '',
+        dailyUrl ? `今日日报: ${dailyUrl}` : '',
       ].filter(Boolean)
     : [
-        `### ❌ ${title}`,
+        `❌ ${title}`,
         ``,
-        `**日期 Date**: ${reportDate}`,
-        runUrl ? `**查看日志 Logs**: [GitHub Actions](${runUrl})` : '',
+        `日期: ${reportDate}`,
+        runUrl ? `查看日志: ${runUrl}` : '',
       ].filter(Boolean);
 
-  const markdown = lines.join('\n');
-  const plainText = markdown.replace(/[#*`\[\]]/g, '').replace(/\]\([^)]+\)/g, '');
+  const plainText = textLines.join('\n');
 
   switch (type) {
     case 'wecom':
     case 'wechat':
     case 'qywx':
-      // Enterprise WeChat (企业微信) webhook
+      // Enterprise WeChat (企业微信) webhook - text type
       return {
-        msgtype: 'markdown',
-        markdown: { content: markdown },
+        msgtype: 'text',
+        text: { content: plainText },
       };
 
     case 'dingtalk':
