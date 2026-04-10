@@ -17,7 +17,31 @@ const producthuntPlugin: SourcePlugin = {
 
   async fetch(config: SourceConfig): Promise<Article[]> {
     const maxItems = config.maxItems ?? 10;
-    const apiToken = config.options?.apiToken as string | undefined;
+    let apiToken = (config.options?.apiToken as string | undefined) || process.env.PRODUCTHUNT_API_TOKEN;
+    const clientId = process.env.PRODUCTHUNT_CLIENT_ID;
+    const clientSecret = process.env.PRODUCTHUNT_CLIENT_SECRET;
+
+    if (!apiToken && clientId && clientSecret) {
+      try {
+        const tokenRes = await proxyFetch('https://api.producthunt.com/v2/oauth/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_id: clientId,
+            client_secret: clientSecret,
+            grant_type: 'client_credentials'
+          }),
+        });
+        if (tokenRes.ok) {
+          const tokenData = await tokenRes.json() as { access_token: string };
+          apiToken = tokenData.access_token;
+        } else {
+          console.warn(`Product Hunt: Failed to fetch OAuth token, status ${tokenRes.status}`);
+        }
+      } catch (err) {
+        console.warn(`Product Hunt: OAuth token error - ${String(err)}`);
+      }
+    }
 
     // Product Hunt requires API token — if not provided, fall back to RSS
     if (!apiToken) {

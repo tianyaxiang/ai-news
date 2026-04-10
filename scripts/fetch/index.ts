@@ -6,11 +6,13 @@ import rssPlugin from './plugins/rss.js';
 import hackernewsPlugin from './plugins/api/hackernews.js';
 import producthuntPlugin from './plugins/api/producthunt.js';
 import webGenericPlugin from './plugins/crawler/web-generic.js';
+import githubTrendingPlugin from './plugins/crawler/github-trending.js';
 
 registry.register(rssPlugin);
 registry.register(hackernewsPlugin);
 registry.register(producthuntPlugin);
 registry.register(webGenericPlugin);
+registry.register(githubTrendingPlugin);
 
 export async function fetchSource(config: SourceConfig): Promise<FetchResult> {
   const plugin = registry.getOrThrow(config.plugin);

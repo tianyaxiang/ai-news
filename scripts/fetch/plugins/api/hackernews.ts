@@ -1,5 +1,6 @@
 import type { SourcePlugin, SourceConfig, Article } from '../../types.js';
 import { proxyFetch } from '../../../proxy.js';
+import * as cheerio from 'cheerio';
 
 interface AlgoliaHit {
   objectID: string;
@@ -50,7 +51,7 @@ const hackernewsPlugin: SourcePlugin = {
           .filter(hit => hit.title)
           .sort((a, b) => b.points - a.points);
 
-        return sorted.map(hit => ({
+        const articles = sorted.map(hit => ({
           title: hit.title,
           url: hit.url ?? `https://news.ycombinator.com/item?id=${hit.objectID}`,
           content:
@@ -61,6 +62,35 @@ const hackernewsPlugin: SourcePlugin = {
           author: hit.author,
           tags: ['hackernews'],
         }));
+
+        // Concurrently fetch the contents of external websites
+        await Promise.all(articles.map(async (article) => {
+          if (article.content.startsWith('Score:')) {
+            try {
+              const res = await proxyFetch(article.url, {
+                signal: AbortSignal.timeout(6000),
+                headers: { 'User-Agent': 'AI-News-Bot/1.0' }
+              });
+              if (res.ok) {
+                const html = await res.text();
+                const $ = cheerio.load(html);
+                $('script, style, nav, footer, header, iframe, noscript, svg, path, symbol').remove();
+                
+                const textContent = $('p').map((_, el) => $(el).text().trim()).get()
+                  .filter(p => p.length > 20)
+                  .join('\n\n');
+                  
+                if (textContent.length > 100) {
+                  article.content = textContent.slice(0, 4000); // Send first 4k chars to AI
+                }
+              }
+            } catch (err) {
+              console.warn(`[hackernews] Could not fetch content for ${article.url}:`, String(err));
+            }
+          }
+        }));
+
+        return articles;
       } catch (err) {
         lastError = err instanceof Error ? err : new Error(String(err));
         console.warn(`[hackernews] Attempt ${attempt}/3 failed: ${lastError.message}`);

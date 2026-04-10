@@ -8,7 +8,7 @@ export function buildDailyPrompt(groupedArticles: Record<string, Article[]>, dat
     for (const article of articles) {
       articleList += `- Title: ${article.title}\n`;
       articleList += `  URL: ${article.url}\n`;
-      articleList += `  Content: ${article.content.slice(0, 500)}\n`;
+      articleList += `  Content: ${article.content.slice(0, 2000)}\n`;
       if (article.author) articleList += `  Author: ${article.author}\n`;
       articleList += '\n';
     }
@@ -25,11 +25,11 @@ Please generate a well-structured Markdown news digest following these rules:
 1. Group articles by source
 2. For each article, provide:
    - The original English title
-   - A Chinese translation of the title
-   - A 2-3 sentence English summary
-   - A 2-3 sentence Chinese summary (not a literal translation — adapt for Chinese readers)
+   - A Chinese translation of the title (Skip this line if the translation is identical to the English title, such as code repository names)
+   - A comprehensive English summary (1-2 substantial paragraphs, detailing the core features, facts, and context)
+   - A comprehensive Chinese summary (1-2 substantial paragraphs, adapting the English summary details naturally for Chinese readers)
    - The original article link
-3. Select the most important/interesting articles (skip duplicates or low-quality items)
+3. Summarize ALL provided articles (skip only exact duplicates). Even if an article only has a title and a score (like Hacker News), you MUST include it and write a brief summary based on its title. Do not aggressively filter them out.
 4. Add a brief "Today's Highlights / 今日要点" section at the top with 3-5 key takeaways in both languages
 
 Output format (Markdown only, no code fences):
@@ -45,7 +45,7 @@ Output format (Markdown only, no code fences):
 ## Source Name
 
 ### Article Title
-### 中文标题
+### 中文标题 (Omit this line entirely if identical to the Article Title)
 
 English summary paragraph.
 

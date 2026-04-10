@@ -65,9 +65,9 @@ const webGenericPlugin: SourcePlugin = {
       // Extract title
       let title: string;
       if (opts.titleSelector) {
-        title = $el.find(opts.titleSelector).text().trim() || $el.text().trim();
+        title = $el.find(opts.titleSelector).text().replace(/\s+/g, ' ').trim() || $el.text().replace(/\s+/g, ' ').trim();
       } else {
-        title = $el.text().trim();
+        title = $el.text().replace(/\s+/g, ' ').trim();
       }
 
       if (!title || title.length < 3) return;
@@ -76,7 +76,7 @@ const webGenericPlugin: SourcePlugin = {
       let content = '';
       if (opts.contentSelector) {
         const $parent = $el.closest('article, .post, .item, li, div');
-        content = $parent.find(opts.contentSelector).text().trim();
+        content = $parent.find(opts.contentSelector).text().replace(/\s+/g, ' ').trim();
       }
 
       articles.push({

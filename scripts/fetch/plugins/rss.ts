@@ -1,4 +1,5 @@
 import RSSParser from 'rss-parser';
+import * as cheerio from 'cheerio';
 import type { SourcePlugin, SourceConfig, Article } from '../types.js';
 import { proxyFetch } from '../../proxy.js';
 
@@ -22,15 +23,27 @@ const rssPlugin: SourcePlugin = {
 
     const articles: Article[] = feed.items
       .slice(0, maxItems)
-      .map(item => ({
-        title: item.title ?? 'Untitled',
-        url: item.link ?? '',
-        content: item.contentSnippet ?? item.content ?? item.summary ?? '',
-        date: item.pubDate ? new Date(item.pubDate) : new Date(),
-        source: config.name,
-        author: item.creator ?? item.author,
-        tags: item.categories ?? [],
-      }));
+      .map(item => {
+        let textContent = item.contentSnippet ?? '';
+        // rss-parser's contentSnippet often drops the first paragraph in some feeds (like Product Hunt).
+        // Try parsing the HTML content directly using cheerio.
+        const htmlContent = item.content || item.summary || '';
+        if (htmlContent) {
+          const $ = cheerio.load(htmlContent);
+          $('script, style').remove();
+          textContent = $('body').text().replace(/\s+/g, ' ').trim();
+        }
+        
+        return {
+          title: item.title ?? 'Untitled',
+          url: item.link ?? '',
+          content: textContent,
+          date: item.pubDate ? new Date(item.pubDate) : new Date(),
+          source: config.name,
+          author: item.creator ?? item.author,
+          tags: item.categories ?? [],
+        };
+      });
 
     return articles;
   },

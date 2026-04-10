@@ -48,6 +48,13 @@
       "url": "https://www.technologyreview.com/feed/",
       "maxItems": 10,
       "enabled": true
+    },
+    {
+      "name": "GitHub Trending",
+      "type": "crawler",
+      "plugin": "github-trending",
+      "maxItems": 10,
+      "enabled": true
     }
   ]
 }
