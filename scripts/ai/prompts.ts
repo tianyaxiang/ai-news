@@ -12,10 +12,15 @@ export function buildDailyPrompt(groupedArticles: Record<string, Article[]>, dat
   for (const [source, articles] of sources) {
     articleList += `\n## Source: ${source}\n`;
     for (const article of articles) {
-      articleList += `- Title: ${article.title}\n`;
-      articleList += `  URL: ${article.url}\n`;
-      articleList += `  Content: ${article.content.slice(0, perArticleBudget)}\n`;
-      if (article.author) articleList += `  Author: ${article.author}\n`;
+      const title = typeof article.title === 'string' ? article.title : String(article.title ?? 'Untitled');
+      const url = typeof article.url === 'string' ? article.url : String(article.url ?? '');
+      const content = typeof article.content === 'string' ? article.content : String(article.content ?? '');
+      const author = typeof article.author === 'string' ? article.author : (article.author && typeof article.author === 'object' ? JSON.stringify(article.author) : String(article.author ?? ''));
+
+      articleList += `- Title: ${title}\n`;
+      articleList += `  URL: ${url}\n`;
+      articleList += `  Content: ${content.slice(0, perArticleBudget)}\n`;
+      if (author) articleList += `  Author: ${author}\n`;
       articleList += '\n';
     }
   }

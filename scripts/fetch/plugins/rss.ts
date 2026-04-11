@@ -34,14 +34,19 @@ const rssPlugin: SourcePlugin = {
           textContent = $('body').text().replace(/\s+/g, ' ').trim();
         }
         
-        return {
+          const rawAuthor = item.creator ?? item.author;
+          const author = typeof rawAuthor === 'string' ? rawAuthor : (rawAuthor && typeof rawAuthor === 'object' ? (rawAuthor as any).name ?? JSON.stringify(rawAuthor) : undefined);
+          const rawTags = item.categories ?? [];
+          const tags = rawTags.map((t: any) => typeof t === 'string' ? t : (t?._ ?? t?.term ?? String(t)));
+
+          return {
           title: item.title ?? 'Untitled',
           url: item.link ?? '',
           content: textContent,
           date: item.pubDate ? new Date(item.pubDate) : new Date(),
           source: config.name,
-          author: item.creator ?? item.author,
-          tags: item.categories ?? [],
+          author,
+          tags,
         };
       });
 
