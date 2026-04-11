@@ -4,29 +4,94 @@ import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
   const posts = await getCollection('daily');
-  return posts.map((post) => ({
+  const sorted = posts.sort((a, b) => a.data.date.localeCompare(b.data.date));
+  return sorted.map((post, i) => ({
     params: { slug: post.id },
-    props: { post },
+    props: {
+      post,
+      prev: sorted[i - 1] ?? null,
+      next: sorted[i + 1] ?? null,
+    },
   }));
 }
 
-const { post } = Astro.props;
-const { Content } = await render(post);
+const { post, prev, next } = Astro.props;
+const { Content, headings } = await render(post);
+// Only show H2s in TOC (source sections like "Hacker News", "TechCrunch")
+const tocItems = headings.filter(h => h.depth === 2);
 ---
 
 <Layout title={post.data.title}>
+  {tocItems.length > 1 && (
+    <nav class="toc">
+      {tocItems.map(h => (
+        <a href={`#${h.slug}`} class="toc-item">{h.text}</a>
+      ))}
+    </nav>
+  )}
+
   <article>
     <Content />
   </article>
+
+  <nav class="day-nav">
+    {prev ? (
+      <a href={`/daily/${prev.id}`} class="day-nav-link prev">
+        <span class="day-nav-label">上一天</span>
+        <span class="day-nav-date">{prev.data.date}</span>
+      </a>
+    ) : <span />}
+    {next ? (
+      <a href={`/daily/${next.id}`} class="day-nav-link next">
+        <span class="day-nav-label">下一天</span>
+        <span class="day-nav-date">{next.data.date}</span>
+      </a>
+    ) : <span />}
+  </nav>
 </Layout>
 
 <style>
+  /* TOC navigation */
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    position: sticky;
+    top: 4px;
+    z-index: 10;
+  }
+
+  .toc-item {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.6rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .toc-item:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  /* Article styling - turn hr-separated sections into cards */
   article {
     line-height: 1.8;
   }
 
   article :global(h2) {
-    margin-top: 2rem;
+    margin-top: 2.5rem;
+    scroll-margin-top: 3.5rem;
   }
 
   article :global(h3) {
@@ -34,7 +99,126 @@ const { Content } = await render(post);
     color: var(--color-text);
   }
 
+  article :global(hr) {
+    border: none;
+    margin: 1.5rem 0;
+  }
+
+  article :global(hr + h3),
+  article :global(h2 + h3) {
+    background: var(--color-card, var(--color-surface));
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 0.75rem 1rem 0.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0;
+  }
+
+  article :global(h3 + h3) {
+    background: var(--color-card, var(--color-surface));
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 8px 8px 0;
+    padding: 0.5rem 1rem;
+    margin-top: -1px;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+  }
+
   article :global(a[href^="http"]) {
     word-break: break-all;
+  }
+
+  /* "Read more" links */
+  article :global(p > a[href^="http"]:only-child) {
+    display: inline-block;
+    padding: 0.35rem 0.8rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    transition: border-color 0.2s;
+  }
+
+  article :global(p > a[href^="http"]:only-child:hover) {
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  /* Prev/Next day navigation */
+  .day-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    gap: 1rem;
+  }
+
+  .day-nav-link {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    text-decoration: none;
+    transition: border-color 0.2s;
+    min-width: 0;
+  }
+
+  .day-nav-link:hover {
+    border-color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .day-nav-link.next {
+    text-align: right;
+    margin-left: auto;
+  }
+
+  .day-nav-label {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .day-nav-date {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    font-family: monospace;
+  }
+
+  /* Mobile */
+  @media (max-width: 640px) {
+    .toc {
+      gap: 0.35rem;
+      padding: 0.5rem;
+      position: relative;
+      top: 0;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .toc-item {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      flex-shrink: 0;
+    }
+
+    article :global(h2) {
+      font-size: 1.1rem;
+      scroll-margin-top: 0.5rem;
+    }
+
+    .day-nav {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .day-nav-link.next {
+      text-align: left;
+    }
   }
 </style>
