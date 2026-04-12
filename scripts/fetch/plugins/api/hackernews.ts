@@ -48,9 +48,7 @@ const hackernewsPlugin: SourcePlugin = {
     const articles = sorted.map(hit => ({
       title: hit.title,
       url: hit.url ?? `https://news.ycombinator.com/item?id=${hit.objectID}`,
-      content:
-        hit.story_text ??
-        `Score: ${hit.points} | Comments: ${hit.num_comments}`,
+      content: hit.story_text || `Score: ${hit.points} | Comments: ${hit.num_comments}`,
       date: new Date(hit.created_at),
       source: config.name,
       author: hit.author,

@@ -1,8 +1,7 @@
 import { writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import type { FetchResult } from './fetch/types.js';
+import type { FetchResult, Article } from './fetch/types.js';
 import { aiGenerate, buildDailyPrompt } from './ai/index.js';
-import type { Article } from './fetch/types.js';
 
 function getDateString(date?: Date): string {
   const d = date ?? new Date();

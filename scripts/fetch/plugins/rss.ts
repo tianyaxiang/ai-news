@@ -18,7 +18,13 @@ const rssPlugin: SourcePlugin = {
     const xml = await res.text();
 
     const parser = new RSSParser();
-    const feed = await parser.parseString(xml);
+    let feed;
+    try {
+      feed = await parser.parseString(xml);
+    } catch (err) {
+      const preview = xml.slice(0, 200).replace(/\n/g, ' ');
+      throw new Error(`Failed to parse RSS for "${config.name}": ${err instanceof Error ? err.message : err} (response starts with: ${preview})`);
+    }
     const maxItems = config.maxItems ?? 10;
 
     const articles: Article[] = feed.items
@@ -34,12 +40,12 @@ const rssPlugin: SourcePlugin = {
           textContent = $('body').text().replace(/\s+/g, ' ').trim();
         }
         
-          const rawAuthor = item.creator ?? item.author;
-          const author = typeof rawAuthor === 'string' ? rawAuthor : (rawAuthor && typeof rawAuthor === 'object' ? (rawAuthor as any).name ?? JSON.stringify(rawAuthor) : undefined);
-          const rawTags = item.categories ?? [];
-          const tags = rawTags.map((t: any) => typeof t === 'string' ? t : (t?._ ?? t?.term ?? String(t)));
+        const rawAuthor = item.creator ?? item.author;
+        const author = typeof rawAuthor === 'string' ? rawAuthor : (rawAuthor && typeof rawAuthor === 'object' ? (rawAuthor as any).name ?? JSON.stringify(rawAuthor) : undefined);
+        const rawTags = item.categories ?? [];
+        const tags = rawTags.map((t: any) => typeof t === 'string' ? t : (t?._ ?? t?.term ?? String(t)));
 
-          return {
+        return {
           title: item.title ?? 'Untitled',
           url: item.link ?? '',
           content: textContent,
