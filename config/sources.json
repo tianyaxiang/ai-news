@@ -65,6 +65,13 @@
       "enabled": true
     },
     {
+      "name": "Anthropic Blog",
+      "type": "crawler",
+      "plugin": "anthropic",
+      "maxItems": 10,
+      "enabled": true
+    },
+    {
       "name": "Google AI Blog",
       "type": "rss",
       "plugin": "rss",
