@@ -136,10 +136,10 @@
       "enabled": true
     },
     {
-      "name": "Meta AI Blog",
+      "name": "Meta Engineering",
       "type": "rss",
       "plugin": "rss",
-      "url": "https://ai.meta.com/blog/rss/",
+      "url": "https://engineering.fb.com/feed/",
       "maxItems": 10,
       "enabled": true
     },
@@ -181,14 +181,6 @@
       "plugin": "rss",
       "url": "https://arxiv.org/rss/cs.CV",
       "maxItems": 8,
-      "enabled": true
-    },
-    {
-      "name": "机器之心",
-      "type": "rss",
-      "plugin": "rss",
-      "url": "https://www.jiqizhixin.com/rss",
-      "maxItems": 10,
       "enabled": true
     },
     {
