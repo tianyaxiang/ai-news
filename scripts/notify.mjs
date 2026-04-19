@@ -39,7 +39,6 @@ function buildPayload(type, status) {
         title,
         ``,
         `日期: ${reportDate}`,
-        siteUrl ? `站点: ${siteUrl}` : '',
         dailyUrl ? `今日日报: ${dailyUrl}` : '',
       ].filter(Boolean)
     : [
@@ -57,7 +56,6 @@ function buildPayload(type, status) {
         `**${title}**`,
         ``,
         `日期: ${reportDate}`,
-        siteUrl ? `站点: [${siteUrl}](${siteUrl})` : '',
         dailyUrl ? `今日日报: [查看日报](${dailyUrl})` : '',
       ].filter(Boolean)
     : [
