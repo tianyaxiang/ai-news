@@ -3,7 +3,7 @@ name: Daily News Generate
 on:
   schedule:
     # Run at the specified time in Asia/Shanghai timezone
-    - cron: '24 6 * * *'
+    - cron: '24 5 * * *'
       timezone: 'Asia/Shanghai'
   workflow_dispatch:
 
