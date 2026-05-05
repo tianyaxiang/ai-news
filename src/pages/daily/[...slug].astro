@@ -21,7 +21,7 @@ const { Content, headings } = await render(post);
 const tocItems = headings.filter(h => h.depth === 2);
 ---
 
-<Layout title={post.data.title}>
+<Layout title={post.data.title} backUrl="/">
   {tocItems.length > 1 && (
     <nav class="toc">
       {tocItems.map(h => (
