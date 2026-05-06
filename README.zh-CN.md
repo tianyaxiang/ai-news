@@ -1,6 +1,6 @@
 # AI News Daily - AI 新闻日报
 
-> 零成本 AI 驱动的每日新闻聚合器。从 16+ 个源采集，生成中英双语摘要，自动发布。
+> 零成本 AI 驱动的每日新闻聚合器。从 24+ 个源采集，生成中英双语摘要，自动发布。
 
 [English](./README.md)
 
@@ -8,7 +8,7 @@
 
 ```
 GitHub Actions (每日定时)
-  → 从 16 个源采集 (RSS / API / 爬虫)
+  → 从 24 个源采集 (RSS / API / 爬虫)
   → 跨源 URL 去重
   → AI 摘要 & 翻译 (中英双语)
   → 生成 Markdown
@@ -29,7 +29,7 @@ GitHub Actions (每日定时)
 
 ## 特性
 
-- **16 个新闻源** — Hacker News、TechCrunch、The Verge、Ars Technica、Product Hunt、MIT 科技评论、GitHub Trending、OpenAI 博客、Google AI 博客、Hugging Face、The Gradient、arXiv CS.AI/CL、WIRED、Lobsters、DEV Community
+- **24 个新闻源** — Hacker News、TechCrunch、The Verge、Ars Technica、Product Hunt、MIT 科技评论、GitHub Trending、OpenAI 博客、Anthropic 博客、Google AI 博客、DeepMind 博客、Meta 官方博客、Microsoft AI、Hugging Face、The Gradient、arXiv (AI/CL/LG/CV)、WIRED、Lobsters、DEV Community、VentureBeat、Towards Data Science
 - **明暗主题** — 跟随系统偏好，支持手动切换（自动 / 明亮 / 暗色）
 - **阅读体验** — 进度条、回到顶部、源目录导航、前一天/后一天切换
 - **移动端优先** — 响应式字体、吸顶横滑目录、触控友好
@@ -110,7 +110,7 @@ pnpm run build
 }
 ```
 
-### 内置数据源 (16 个)
+### 内置数据源 (24 个)
 
 | 数据源 | 类型 | 插件 | 说明 |
 |--------|------|------|------|
@@ -122,14 +122,22 @@ pnpm run build
 | Ars Technica | RSS | `rss` | 深度技术报道 |
 | MIT Technology Review | RSS | `rss` | MIT 科技评论 |
 | OpenAI Blog | RSS | `rss` | OpenAI 官方博客 |
+| Anthropic Blog | 爬虫 | `anthropic` | Anthropic 官方博客 |
 | Google AI Blog | RSS | `rss` | Google AI 研究 |
+| DeepMind Blog | RSS | `rss` | DeepMind 研究 |
+| Meta Engineering | RSS | `rss` | Meta 工程博客 |
+| Microsoft AI Blog | RSS | `rss` | 微软 AI 博客 |
 | Hugging Face Blog | RSS | `rss` | 开源 AI 社区 |
 | The Gradient | RSS | `rss` | AI 深度分析 |
 | arXiv CS.AI | RSS | `rss` | AI 最新论文 |
 | arXiv CS.CL | RSS | `rss` | NLP 最新论文 |
+| arXiv CS.LG | RSS | `rss` | 机器学习论文 |
+| arXiv CS.CV | RSS | `rss` | 计算机视觉论文 |
 | WIRED | RSS | `rss` | 科技文化 |
 | Lobsters | RSS | `rss` | 高质量技术讨论 |
 | DEV Community | RSS | `rss` | 开发者社区 |
+| VentureBeat AI | RSS | `rss` | 创投 AI 资讯 |
+| Towards Data Science | RSS | `rss` | 数据科学前沿 |
 
 ### 自定义插件
 
@@ -192,7 +200,7 @@ export default myPlugin;
 ai-news/
 ├── .github/workflows/daily.yml  # 定时流水线
 ├── config/
-│   └── sources.json             # 数据源配置 (16 个源)
+│   └── sources.json             # 数据源配置 (24 个源)
 ├── scripts/
 │   ├── fetch/
 │   │   ├── types.ts             # 核心类型定义
@@ -204,7 +212,8 @@ ai-news/
 │   │   │   │   └── producthunt.ts
 │   │   │   └── crawler/
 │   │   │       ├── web-generic.ts
-│   │   │       └── github-trending.ts
+│   │   │       ├── github-trending.ts
+│   │   │       └── anthropic.ts
 │   │   └── index.ts             # 采集调度器
 │   ├── ai/
 │   │   ├── provider.ts          # 多服务商 AI 适配器
@@ -215,7 +224,9 @@ ai-news/
 │   ├── notify.mjs               # Webhook 通知
 │   └── main.ts                  # 入口
 ├── src/                         # Astro 网站
-│   ├── content/daily/           # 生成的日报
+│   ├── content/
+│   │   ├── daily/               # 生成的日报
+│   │   └── news/                # 翻译后的新闻详情 (按日期归档)
 │   ├── layouts/
 │   │   └── Layout.astro         # 明暗主题、进度条、回到顶部
 │   └── pages/

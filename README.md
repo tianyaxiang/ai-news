@@ -1,6 +1,6 @@
 # AI News Daily
 
-> Zero-cost AI-powered daily news aggregator. Fetches from 16+ sources, generates bilingual (EN/CN) summaries, and publishes automatically.
+> Zero-cost AI-powered daily news aggregator. Fetches from 24+ sources, generates bilingual (EN/CN) summaries, and publishes automatically.
 
 [中文文档](./README.zh-CN.md)
 
@@ -8,7 +8,7 @@
 
 ```
 GitHub Actions (cron daily)
-  → Fetch from 16 sources (RSS / API / Crawler)
+  → Fetch from 24 sources (RSS / API / Crawler)
   → Cross-source URL deduplication
   → AI summarize & translate (bilingual)
   → Generate Markdown
@@ -29,7 +29,7 @@ GitHub Actions (cron daily)
 
 ## Features
 
-- **16 news sources** — Hacker News, TechCrunch, The Verge, Ars Technica, Product Hunt, MIT Tech Review, GitHub Trending, OpenAI Blog, Google AI Blog, Hugging Face, The Gradient, arXiv CS.AI/CL, WIRED, Lobsters, DEV Community
+- **24 news sources** — Hacker News, TechCrunch, The Verge, Ars Technica, Product Hunt, MIT Tech Review, GitHub Trending, OpenAI, Anthropic, Google AI, DeepMind, Meta, Microsoft AI, Hugging Face, The Gradient, arXiv (AI/CL/LG/CV), WIRED, Lobsters, DEV Community, VentureBeat, Towards Data Science
 - **Dark / Light theme** — follows system preference, manual toggle (auto / light / dark)
 - **Reading experience** — progress bar, back-to-top, source TOC navigation, prev/next day navigation
 - **Mobile-first** — responsive typography, sticky horizontal-scroll TOC, touch-friendly targets
@@ -110,7 +110,7 @@ Edit `config/sources.json` to add/remove news sources:
 }
 ```
 
-### Built-in Sources (16)
+### Built-in Sources (24)
 
 | Source | Type | Plugin |
 |--------|------|--------|
@@ -122,14 +122,22 @@ Edit `config/sources.json` to add/remove news sources:
 | Ars Technica | RSS | `rss` |
 | MIT Technology Review | RSS | `rss` |
 | OpenAI Blog | RSS | `rss` |
+| Anthropic Blog | Crawler | `anthropic` |
 | Google AI Blog | RSS | `rss` |
+| DeepMind Blog | RSS | `rss` |
+| Meta Engineering | RSS | `rss` |
+| Microsoft AI Blog | RSS | `rss` |
 | Hugging Face Blog | RSS | `rss` |
 | The Gradient | RSS | `rss` |
 | arXiv CS.AI | RSS | `rss` |
 | arXiv CS.CL | RSS | `rss` |
+| arXiv CS.LG | RSS | `rss` |
+| arXiv CS.CV | RSS | `rss` |
 | WIRED | RSS | `rss` |
 | Lobsters | RSS | `rss` |
 | DEV Community | RSS | `rss` |
+| VentureBeat AI | RSS | `rss` |
+| Towards Data Science | RSS | `rss` |
 
 ### Writing Custom Plugins
 
@@ -192,7 +200,7 @@ Set these in your GitHub repo **Settings > Secrets**:
 ai-news/
 ├── .github/workflows/daily.yml  # Scheduled pipeline
 ├── config/
-│   └── sources.json             # News source configuration (16 sources)
+│   └── sources.json             # News source configuration (24 sources)
 ├── scripts/
 │   ├── fetch/
 │   │   ├── types.ts             # Core type definitions
@@ -204,7 +212,8 @@ ai-news/
 │   │   │   │   └── producthunt.ts
 │   │   │   └── crawler/
 │   │   │       ├── web-generic.ts
-│   │   │       └── github-trending.ts
+│   │   │       ├── github-trending.ts
+│   │   │       └── anthropic.ts
 │   │   └── index.ts             # Fetch orchestrator
 │   ├── ai/
 │   │   ├── provider.ts          # Multi-provider AI adapter
@@ -215,7 +224,9 @@ ai-news/
 │   ├── notify.mjs               # Webhook notifications
 │   └── main.ts                  # Entry point
 ├── src/                         # Astro website
-│   ├── content/daily/           # Generated daily reports
+│   ├── content/
+│   │   ├── daily/               # Generated daily reports
+│   │   └── news/                # Translated individual news details (grouped by date)
 │   ├── layouts/
 │   │   └── Layout.astro         # Dark/light theme, progress bar, back-to-top
 │   └── pages/
