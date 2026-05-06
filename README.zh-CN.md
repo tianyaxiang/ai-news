@@ -172,9 +172,10 @@ export default myPlugin;
 
 ### 可选 Secrets
 
-- `PRODUCTHUNT_CLIENT_ID` / `PRODUCTHUNT_CLIENT_SECRET` — Product Hunt API（无配置时回退到 RSS）
+- `PRODUCTHUNT_CLIENT_ID` / `PRODUCTHUNT_CLIENT_SECRET` / `PRODUCTHUNT_API_TOKEN` — Product Hunt API（无配置时回退到 RSS）
 - `WEBHOOK_URL` — 通知 Webhook 地址
 - `WEBHOOK_TYPE` — 类型：`wecom`(企业微信) | `dingtalk`(钉钉) | `feishu`(飞书) | `slack` | `generic`
+- `SITE_URL` — 你的网站访问地址（如 `https://your-site.com`），用于在通知消息中拼接日报的直达链接
 
 ## Cloudflare Pages 部署
 

@@ -172,9 +172,10 @@ Set these in your GitHub repo **Settings > Secrets**:
 
 ### Optional Secrets
 
-- `PRODUCTHUNT_CLIENT_ID` / `PRODUCTHUNT_CLIENT_SECRET` — Product Hunt API (falls back to RSS)
+- `PRODUCTHUNT_CLIENT_ID` / `PRODUCTHUNT_CLIENT_SECRET` / `PRODUCTHUNT_API_TOKEN` — Product Hunt API (falls back to RSS if not configured)
 - `WEBHOOK_URL` — Notification webhook endpoint
 - `WEBHOOK_TYPE` — One of: `wecom` | `dingtalk` | `feishu` | `slack` | `generic`
+- `SITE_URL` — Your deployed website URL (e.g., `https://your-site.com`), used for direct links in webhook notifications
 
 ## Cloudflare Pages Setup
 
