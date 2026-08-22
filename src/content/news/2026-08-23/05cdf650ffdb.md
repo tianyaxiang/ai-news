@@ -1,0 +1,41 @@
+---
+title: "Will the DOJ’s investigation into a16z spook other VCs?"
+originalUrl: "https://techcrunch.com/2026/08/22/will-the-dojs-investigation-into-a16z-spook-other-vcs/"
+date: "2026-08-22T21:42:03.083Z"
+---
+
+# Will the DOJ’s investigation into a16z spook other VCs?
+# 美国司法部对 a16z 的调查会吓到其他风投公司吗？
+
+Following a Bloomberg report that the Department of Justice is investigating venture firm Andreessen Horowitz for holding board seats with rival AI companies, VCs told TechCrunch that they were baffled. On the latest episode of the Equity podcast, Kirsten Korosec, Sean O’Kane, and I were similarly puzzled by the news. Yes, VC conflicts-of-interest are worth taking seriously, but as Kirsten wondered, “Of all the things that the DOJ would focus on in terms of level of importance, why does this one rise to the top?”
+继彭博社报道称美国司法部（DOJ）正在调查风投公司 Andreessen Horowitz（a16z）因其在竞争对手 AI 公司中担任董事会席位一事后，多位风投人士向 TechCrunch 表示他们感到困惑。在最新一期的《Equity》播客中，Kirsten Korosec、Sean O’Kane 和我也对这一消息感到同样的不解。没错，风投行业的利益冲突确实值得重视，但正如 Kirsten 所质疑的那样：“在司法部所有需要关注的重点事项中，为什么这件事会排在首位？”
+
+The news was also surprising because of a16z’s ties with the Trump administration, and because the firm has been so quiet about the investigation. It’s a real contrast with the firm’s activity during the Biden years, when — as Sean put it — “every little policy change, especially related to crypto, generated a day’s worth of posting.” But Sean also speculated that by targeting a16z, the DOJ might also be setting an “example” that “smaller firms would follow.”
+这一消息之所以令人惊讶，还因为 a16z 与特朗普政府之间的紧密联系，以及该公司对此次调查表现出的异常沉默。这与该公司在拜登执政期间的活跃表现形成了鲜明对比——正如 Sean 所言，当时“每一项微小的政策变动，尤其是与加密货币相关的，都会引发他们一整天的发帖讨论”。但 Sean 也推测，司法部通过针对 a16z，可能是在树立一个“让小型公司效仿”的“榜样”。
+
+Kirsten Korosec: I think that you bring some interesting perspective to this, Anthony, because you actually worked at a VC firm, whereas Sean and I have never been inside the confines of the VC world. We’ve only reported on it.
+Kirsten Korosec：Anthony，我认为你对此提供了有趣的视角，因为你确实在风投公司工作过，而 Sean 和我从未进入过风投圈，我们只是对此进行过报道。
+
+Anthony Ha: Long-time equity listeners will know that I did spend a couple years working at an early stage VC firm — a much smaller firm than Andreessen Horowitz, as different as you can be while still technically being in the same industry. It did color my response when I was reading this article, which is essentially about these board seats that Andreessen Horowitz holds, and the idea that they have board seats in some companies that have become competitors. It was really surprising to me, as apparently it was to a number of other VCs. And again, I’m not a lawyer, I was not on the legal team of this VC firm. There is, obviously, an understanding, and apparently laws, around the idea that you should not be on boards of competing startups. But this is not something that is, generally, enforced very closely.
+Anthony Ha：《Equity》的老听众都知道，我确实曾在一家早期风投公司工作过几年——那是一家比 Andreessen Horowitz 小得多的公司，虽然在技术上属于同一行业，但两者差异巨大。当我阅读这篇文章时，这种经历确实影响了我的看法。文章的核心在于 a16z 持有的这些董事会席位，以及他们在一些已成为竞争对手的公司中拥有席位的事实。这让我感到非常惊讶，显然其他许多风投人士也有同感。再次声明，我不是律师，也不曾在这家风投公司的法律团队工作过。显然，业界有一种共识，甚至有相关法律规定，你不应该同时担任竞争对手初创公司的董事。但这通常并不是一项执行得非常严格的规定。
+
+Founders don’t feel great if you are on the board of their biggest competitor. But also, startups evolve. And I think that was true in this case — you invest in a startup doing one thing, and then, say, the AI boom happens, and suddenly they’re doing something completely different. So the idea that you would have a year-long DOJ investigation into this — we don’t really know what the results are, there’s a lot of questions about this, but it just seems very strange.
+如果投资者同时担任他们最大竞争对手的董事，创始人会感到不舒服。但初创公司是会演变的。我认为这种情况就是如此——你投资了一家做某项业务的初创公司，然后，比如 AI 热潮爆发了，他们突然开始做完全不同的事情。因此，针对此事进行长达一年的司法部调查——我们尚不清楚结果如何，对此有很多疑问，但这看起来确实非常奇怪。
+
+Kirsten: In this case, Ben Horowitz sits on the Databricks board. Partner Martin Casado sits on Fivetran board. And to your point, especially in this AI-driven boom cycle, a lot of companies are changing what they’re doing, and either to jump into the AI space or to take advantage of specific subcategories within it. And a company the size of Andreessen, which makes so many investments and is on a lot of board seats, you can see how this would happen. To me, what was interesting — and Sean, I wonder if you have an opinion on this — is of all the things that the DOJ would focus on in terms of level of importance, why does this one rise to the top?
+Kirsten：在这种情况下，Ben Horowitz 在 Databricks 董事会任职，合伙人 Martin Casado 在 Fivetran 董事会任职。正如你所说，特别是在这个 AI 驱动的繁荣周期中，许多公司都在改变业务方向，要么是为了进入 AI 领域，要么是为了利用其中的特定细分市场。像 Andreessen 这样规模的公司，投资了这么多项目并占据了大量董事会席位，你可以看出这种情况是如何发生的。对我来说，有趣的是——Sean，我想知道你对此有何看法——在司法部所有需要关注的重点事项中，为什么这件事会排在首位？
+
+Sean O’Kane: I’m just excited we’ve got another chance for disruption here. I mean, we could create a startup that is just going to put an AI on your board, and there are no conflicts of interest. Let’s do it. No, you’re right. It’s weird for a number of reasons, and when I first saw the headline, it certainly piqued my interest because I wanted to know what it was that they were looking at. We should back up just a real quick second. Bloomberg reported that this [investigation] has been going on for nearly a year, so this started under the Trump administration. The people who run Andreessen Horowitz are very friendly with the Trump administration, involved in the Trump administration in some ways, sitting on some councils and things like that.
+Sean O’Kane：我很高兴我们又有了颠覆的机会。我的意思是，我们可以创办一家初创公司，专门把 AI 放到董事会里，这样就不会有利益冲突了。我们干吧。不，你说得对。这件事在很多方面都很奇怪，当我第一次看到标题时，它确实引起了我的兴趣，因为我想知道他们到底在调查什么。我们应该快速回顾一下。彭博社报道称，这项调查已经进行了近一年，所以它是在特朗普政府时期开始的。管理 Andreessen Horowitz 的人与特朗普政府关系非常友好，在某些方面参与了特朗普政府的工作，并在一些委员会中任职。
+
+And so, for as much rhetoric as the [second] Trump administration was putting out there when it was still incoming, about being antitrust forward and fighting against the big forces of consolidation or whatever, that really hasn’t borne out. I mean, they settled with Live Nation. They didn’t break up Ticketmaster. We could spend all day talking about how that was a pretty hollow promise. The Justice Department should not be a tool for the president to just direct at enemies or friends or whoever. But it’s just interesting that this is a bridge they were willing to cross, knowing how close they are with this administration.
+因此，尽管特朗普（第二届）政府在刚上任时发表了大量关于反垄断、打击大型整合势力等的言论，但这些言论并没有真正落实。我的意思是，他们与 Live Nation 达成了和解，并没有拆分 Ticketmaster。我们可以花一整天时间讨论那是一个多么空洞的承诺。司法部不应该成为总统随意针对敌人、朋友或其他任何人的工具。但有趣的是，考虑到他们与本届政府的亲密关系，他们竟然愿意跨越这条界限。
+
+And I’ve reported on some things that Andreessen Horowitz have done that made me wonder if that was going to be part of this. Two years ago, we published a story about how Ben Horowitz was personally making connections between the startups that Andreessen Horowitz backs and [the] local police department in Las Vegas, and things that have maybe more of an anti-competitive flavor to it than this — which, like you’ve said, is maybe a bit more by chance because of the way that these companies evolved and wound up competing against each other.
+我曾报道过一些 Andreessen Horowitz 的所作所为，这让我怀疑那是否会成为调查的一部分。两年前，我们发表了一篇报道，讲述了 Ben Horowitz 如何亲自在 Andreessen Horowitz 支持的初创公司与拉斯维加斯当地警察局之间牵线搭桥。这些事情可能比现在的调查更具反竞争色彩——而现在的调查，正如你所说，更多是因为这些公司在演变过程中偶然形成了竞争关系。
+
+[It] certainly doesn’t seem like it’s something that Andreessen Horowitz feels [is] such an overreach that we have seen them complaining about it on Twitter, like they were during the Biden era — where every little policy change, especially related to crypto, generated a day’s worth of posting. We haven’t really seen that here. So maybe it’s all going to be copacetic in the end.
+这看起来肯定不像 Andreessen Horowitz 认为的那种“越权”行为，以至于让他们像在拜登时代那样在 Twitter 上抱怨——当时每一项微小的政策变动，尤其是与加密货币相关的，都会引发他们一整天的发帖。我们在这里并没有看到这种情况。所以也许最终一切都会相安无事。
+
+Anthony: To Sean’s point about the DOJ, without getting too deeply into the politics of it, I think anyone who’s been reading the news knows there’s a lot of turmoil there. There’s a lot of questions about sort of how politicized the office has or hasn’t become. Which, again, just makes it very surprising and strange that there has been this long investigation into an ostensible ally of the Trump administration.
+Anthony：关于 Sean 提到的司法部，在不深入探讨政治的情况下，我认为任何关注新闻的人都知道那里存在很多动荡。关于该部门在多大程度上被政治化，存在很多疑问。这再次让我感到非常惊讶和奇怪，因为他们竟然对特朗普政府的一位表面盟友进行了如此长时间的调查。
