@@ -1,0 +1,43 @@
+---
+title: "Dynamically Naming Servers"
+originalUrl: "https://arch.dog/bark/dynamically-naming-servers"
+date: "2026-08-24T21:54:42.120Z"
+---
+
+# Dynamically Naming Servers / 动态命名服务器
+
+I have a problem. A self hosting problem. When I provision a new container or virtual machine to serve an application, I let my Ubiquiti router's DHCP server hand them an IP. I already have to manage some static IP assignments for things like my PostgreSQL cluster or Kubernetes nodes, so letting machines that don't need static IPs get one assigned is helpful to my mental load. And generally since these machine are long-running (rarely shut down), the IP reservation the router hands to them sticks around. It sticks around long enough, anyways, that I get comfortable assuming it's basically static and end up relying on it being the same always. This is, of course, wrong, but I did it anyways.
+
+我有一个问题，一个关于自托管的问题。每当我配置一个新的容器或虚拟机来运行应用程序时，我都会让我的 Ubiquiti 路由器的 DHCP 服务器为它们分配 IP。由于我已经需要为 PostgreSQL 集群或 Kubernetes 节点等设备管理一些静态 IP 分配，因此让不需要静态 IP 的机器自动获取地址可以减轻我的心理负担。通常情况下，由于这些机器是长期运行的（很少关机），路由器分配给它们的 IP 租约会一直保持。无论如何，它保持的时间足够长，以至于我习惯性地认为它基本上是静态的，并最终依赖于它永远不变。这当然是错误的，但我还是这么做了。
+
+This really bit me when I moved my home subnet to a 10.0.0.0/8 range, rather than a 192.168.0.0/16 range. I was expecting everything to get new addresses assigned, so I was prepared, but it was still really annoying going through and grabbing all the new addresses. It's also an annoyance when a DHCP reservation does drop and the IP of a machine changes (which I won't notice until I actually need to use it). I curse myself, think "wasn't DNS supposed to solve this?", then go back to what I was trying to do in the first place.
+
+当我将家庭子网从 192.168.0.0/16 范围迁移到 10.0.0.0/8 范围时，这个问题真的让我吃尽了苦头。我预料到所有设备都会被分配新地址，也做好了准备，但逐一去获取所有新地址的过程依然非常烦人。当 DHCP 租约失效导致机器 IP 发生变化时（直到我真正需要使用它时才会发现），这也是一件令人恼火的事。我咒骂自己，心想“DNS 不是应该解决这个问题吗？”，然后又回到我最初想做的事情上。
+
+But Arch! You say to your computer, "Why aren't you putting everything on you Tailscale Tailnet!!??" The short version is that even for how easy Tailscale is to get up and running on a machine, I still find it a bit of a hassle, especially for a homelab where there's a decent amount of churn. I also don't want to have to rely on Tailscale being functional to use services already on my LAN (Tailscale hasn't had issues that impacted me in my time using it, but I digress, I want to avoid that lock-in). My partner doesn't run their computer and phone connected to Tailscale all the time, but would still like to access some of these services without having to toggle it on.
+
+但是，Arch！你可能会对你的电脑说：“为什么你不把所有东西都放到 Tailscale Tailnet 里呢！！？？” 简短的回答是，尽管 Tailscale 在机器上部署非常容易，但我仍然觉得它有点麻烦，尤其是在设备变动频繁的家庭实验室中。我也不想为了使用局域网内已有的服务而依赖 Tailscale 的可用性（虽然我在使用 Tailscale 的这段时间里没遇到过影响我的问题，但我不想被这种技术锁定）。我的伴侣并没有让他们的电脑和手机一直连接 Tailscale，但他们仍然希望在不开启它的情况下访问其中一些服务。
+
+And finally, its much easier for me to reason with my home network without having to think about Tailscale routing or going around issues transparently. Basically, while every VM and LXC being on Tailscale would be useful, I'd find it more of a hassle for little gain and thus rely on a few "ingress points" on the Tailnet to route to LAN services (e.g my Proxmox NAS runs Caddy, which reverse proxies to LAN subnetted services, and is on Tailscale). Finding myself with ample free time after being made redundant from my employer, I finally decided to take a crack at this.
+
+最后，无需考虑 Tailscale 路由或透明地绕过问题，让我更容易管理家庭网络。基本上，虽然让每个 VM 和 LXC 都加入 Tailscale 很有用，但我发现这带来的麻烦多于收益，因此我倾向于在 Tailnet 上设置几个“入口点”来路由到局域网服务（例如，我的 Proxmox NAS 运行着 Caddy，它作为反向代理指向局域网子网服务，并且它本身在 Tailscale 上）。在被公司裁员后，我有了充足的空闲时间，终于决定尝试解决这个问题。
+
+I did try to use the DNS entries that Ubiquiti routers generate for DHCP clients, but I found the behaviour unsatisfactory. If a machine self-declared a static IP address, it wouldn't populate an entry in the router, and the entries for the DHCP clients that were available were inconsistently available. Anyways, I had a better plan. For treens. Dynamic DNS services have been around forever. An easy way to point a domain to a home IP address that isn't static, automatically updating the relevant record when the IP changes. There are plenty of options for doing this with "real" domain nameservers, but I wasn't aware of any that would work well entirely locally, only exposing the records to the LAN they sat on (and where they're actually useful).
+
+我确实尝试过使用 Ubiquiti 路由器为 DHCP 客户端生成的 DNS 条目，但发现其表现并不理想。如果机器自行声明了静态 IP 地址，它就不会在路由器中生成条目，而且现有的 DHCP 客户端条目也经常不可用。总之，我有一个更好的计划：Treens。动态 DNS 服务已经存在很久了，这是一种将域名指向非静态家庭 IP 地址的简便方法，当 IP 变化时会自动更新相关记录。使用“真实”域名服务器来实现这一点有很多选择，但我不知道有什么方案能完全在本地良好运行，且仅将记录暴露给它们所在的局域网（即它们真正有用的地方）。
+
+I started sketching out a plan. First, we need a way for a machine to authenticate with the service to tell it the IP we want associated with the hostname. There are so, so many ways of doing this, but the key for my homelab was making it automatic. I didn't want to generate an API key and put it on a server or do some other auth dance. I wanted a machine to be able to claim its own hostname mostly autonomously, so I ended up going with message signing using ed25519 keypairs. The client generates its own private key and registers the public side with the server, claiming its hostname with the server. Subsequent update messages are sent with a signature header which the server can use to verify the message is authenticate, then updates the hostname record with the desired IPs.
+
+我开始勾勒计划。首先，我们需要一种方式让机器向服务进行身份验证，以告知它我们希望与主机名关联的 IP。实现这一点的方法有很多，但对我家庭实验室的关键在于自动化。我不想生成 API 密钥并将其放在服务器上，也不想进行其他繁琐的认证操作。我希望机器能够基本自主地声明自己的主机名，所以我最终选择了使用 ed25519 密钥对进行消息签名。客户端生成自己的私钥，并将公钥注册到服务器，从而向服务器声明其主机名。后续的更新消息会带有签名头，服务器可以使用它来验证消息的真实性，然后用所需的 IP 更新主机名记录。
+
+I also wanted to work in a Merkle Tree for record validation, but ended up scraping that idea for the time being. Merkle Trees are neat and a really effecient way of validating a chain of hashes, but I realised also very redundant in the initial implementation. I intend to have one for the audit log, but haven't gotten that far. Hence the name "treens" (Tree Name Server). Realistically, this project is fairly simple. Assuming, of course, you don't pick Rust for it. I keep picking Rust for projects because I've found it cozy to work with, but I did have to spend some time fighting, or adapting to, handling UDP and TCP messages directly.
+
+我还想在记录验证中引入 Merkle 树，但目前放弃了这个想法。Merkle 树很巧妙，是验证哈希链的一种非常有效的方法，但我意识到在初始实现中它显得有些多余。我打算以后为审计日志引入它，但还没做到那一步。这就是“treens”（树状名称服务器）这个名字的由来。实际上，这个项目相当简单。当然，前提是你不要选择 Rust。我一直选择 Rust 来做项目，因为我觉得用它工作很舒服，但我确实花了一些时间来处理或适应直接处理 UDP 和 TCP 消息的问题。
+
+The Hickory DNS project has some crates for handling the payloads and types for DNS requests, so that wasn't a huge issue, but I did have to think about things like "how do I make sure I don't exhaust all connections to the server" or "why is TCP so weird with its special headers, UDP is so much better". SQLite was picked as the backing store for simplicity. I did want to explore a KV like Sled or redb, but SQLite won out because of existing familiarity. Another addon to this I want to explore is clustering / gossiping of new entries as well, so instances can be shifted around or scaled in a larger environment, but if I ever find it useful in a larger environment I suspect I may find other edge cases that cause issues before SQLite needs to be reconsidered.
+
+Hickory DNS 项目提供了一些用于处理 DNS 请求负载和类型的 crate，所以这并不是什么大问题，但我确实需要考虑诸如“如何确保我不会耗尽服务器的所有连接”或“为什么 TCP 的特殊头部这么奇怪，UDP 好多了”之类的问题。为了简单起见，我选择了 SQLite 作为后端存储。我确实想过探索像 Sled 或 redb 这样的键值存储，但由于我对 SQLite 更熟悉，它最终胜出。我还想探索的另一个功能是新条目的集群/Gossip 协议，这样实例可以在更大的环境中迁移或扩展，但如果我真的在更大的环境中使用它，我怀疑在需要重新考虑 SQLite 之前，我会先遇到其他导致问题的边缘情况。
+
+The end result is a DNS server with TCP and UDP handlers that responds with entries for the hosts that have registered with it, and a basic HTTP endpoint for handling new hosts and IP updates. Records aren't served until a host is "approved", and since I wanted this to be relatively autonomous I allow subnets to auto-approve based on the client's requesting IP address (rather than the one they declare, since they are allowed to differ). I've pointed my homelab's Unbound instances to the running server with a stub-zone and have just been letting it run in the...
+
+最终的结果是一个带有 TCP 和 UDP 处理程序的 DNS 服务器，它能为已注册的主机返回条目，并提供一个基本的 HTTP 端点来处理新主机和 IP 更新。记录在主机被“批准”之前不会被提供，由于我希望这个过程相对自主，我允许子网根据客户端的请求 IP 地址（而不是它们声明的 IP，因为两者可能不同）进行自动批准。我已经将我家庭实验室的 Unbound 实例指向了正在运行的服务器，并设置了存根区域（stub-zone），目前它正在运行中……
