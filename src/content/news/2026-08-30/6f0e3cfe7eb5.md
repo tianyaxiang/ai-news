@@ -1,0 +1,41 @@
+---
+title: "The internet is kind of a predatory cesspit now"
+originalUrl: "https://www.stephendiehl.com/posts/internet_predatory_cesspit/"
+date: "2026-08-29T23:25:15.479Z"
+---
+
+# The internet is kind of a predatory cesspit now
+# 如今的互联网简直是一个掠夺性的粪坑
+
+I’m a kid of the 90s, and I still remember the early internet. It was slow, ugly, unreliable, and full of cranks, a strange world of wheezing dial-up modems, Usenet flamewars, `<marquee>` tags, and dancing babies. It was also stubbornly alive and human. People built websites about Babylon 5, model rockets, train timetables, shareware, and whatever else had colonised their minds. Most of it had no business model. That was the literal point. The web felt like a public square assembled by obsessive amateurs.
+我是 90 后，依然记得早期的互联网。那时它缓慢、丑陋、不可靠，充满了怪人，是一个由喘息的拨号调制解调器、Usenet 骂战、`<marquee>` 标签和跳舞婴儿组成的奇异世界。但它也顽强地鲜活且充满人性。人们建立关于《巴比伦 5 号》、模型火箭、火车时刻表、共享软件以及任何占据他们心智的事物的网站。其中大部分都没有商业模式，这恰恰是它的核心意义所在。当时的互联网感觉就像一个由痴迷的业余爱好者组建的公共广场。
+
+None of this was entirely innocent. There were scams, viruses, Nazis, pornography, and chain emails from deposed Nigerian princes. But then predation moved from the periphery to the centre. It used to be an abuse of the network. Now it is the network’s organising principle. The scammer once had to find a victim. The platform now finds one, profiles the weakness, optimises the pitch, processes the payment, and recommends the next scam. What was once an aberration has become the norm.
+这一切并非完全纯洁。当时也有诈骗、病毒、纳粹、色情内容以及来自被废黜的尼日利亚王子的连锁邮件。但后来，掠夺行为从边缘走向了中心。过去，这只是对网络的滥用；现在，这成了网络的组织原则。骗子曾经需要自己寻找受害者，而现在的平台会主动寻找受害者，分析其弱点，优化推销话术，处理支付，并推荐下一个骗局。曾经的异常现象，如今已成为常态。
+
+The modern internet is now a highly optimised machine for detecting human vulnerability, amplifying it, and placing a payment link beside it. Any insecurity can become a commercial niche, including the desire to escape commercial life itself. There is always a course, a newsletter, a private community, or a referral code waiting at the end of the funnel.
+现代互联网现在是一台高度优化的机器，专门用于探测人类的脆弱性，将其放大，并在旁边放置一个支付链接。任何不安全感都可以成为一个商业利基市场，包括想要逃离商业生活的愿望。在漏斗的尽头，总有一个课程、一份通讯、一个私人社区或一个推荐码在等着你。
+
+The bleak part is not that grifters exist. Every society has hucksters. It is that much of the population has been conscripted into the downline. Ordinary people now spend their lives promoting investments they barely understand, products that do not work, and political claims they have never examined. Many earn nothing. They are unpaid distributors for someone farther up the pyramid. The consumer, salesman, and product have collapsed into the same exhausted person.
+最令人沮丧的不是骗子的存在——每个社会都有江湖骗子——而是大部分人口已被征召进下线。普通人现在终其一生都在推广他们几乎不了解的投资、无效的产品以及从未审视过的政治主张。许多人一无所获，他们只是金字塔顶端人员的无薪分销商。消费者、推销员和产品已经坍缩成了同一个疲惫不堪的人。
+
+People increasingly behave like addicts because addiction is the business model. The feed supplies alternating doses of outrage, fear, envy, lust, and hope. Each feeling arrives with something to buy. People doomscroll until they acquire the anxiety that the next influencer will monetise. Then they purchase a bet, a coin, a supplement, a course, or an enemy. Finally, they repost the pitch. Consumption becomes distribution. The mark becomes the salesman. This is an industrial system for manufacturing weakness at scale.
+人们越来越像瘾君子，因为成瘾就是商业模式。信息流交替提供着愤怒、恐惧、嫉妒、欲望和希望。每一种情绪的到来都伴随着某种待售商品。人们不断地“末日刷屏”（doomscroll），直到产生焦虑，而下一个网红就会将这种焦虑变现。接着，他们购买赌注、代币、补品、课程或一个敌人。最后，他们转发推销内容。消费变成了分销，受害者变成了推销员。这是一个大规模制造脆弱性的工业系统。
+
+A legitimate business can survive a satisfied customer. A grift cannot. It needs the customer frightened, aggrieved, lonely, sick, or greedy forever. When I started writing about cryptocurrency in 2020, I still carried a naive assumption about the size of this economy. I thought people were generally decent and the grifter class was a small pool of degenerates with rotten moral character, preying on those made vulnerable by the material conditions of our time. I was very wrong.
+合法的企业可以靠满意的客户生存，但骗局不行。它需要客户永远处于恐惧、委屈、孤独、病态或贪婪的状态。2020 年我开始撰写关于加密货币的文章时，对这个经济体的规模还抱有天真的假设。我以为人们大体上是正派的，骗子阶层只是一小群道德败坏的堕落者，专门掠夺那些因时代物质条件而变得脆弱的人。我大错特错了。
+
+The grift economy is massive. More disturbing still, it is participatory. A large and growing share of the population now appears willing to devote every waking hour to fleecing their fellow man as a career choice. They stream, post, recruit, promote, refer, astroturf, and close. They turn every friendship into a lead and every conversation into a qualifying call. They do not clock out because the market follows them into bed. The smartphone is a shop counter that sleeps beside their head.
+骗局经济规模巨大。更令人不安的是，它是参与式的。现在，很大一部分且不断增长的人口似乎愿意将每一个清醒的时刻都投入到欺骗同胞的事业中，并将其作为职业选择。他们直播、发帖、招募、推广、引荐、制造虚假民意并完成交易。他们从不“下班”，因为市场会跟着他们上床。智能手机就是睡在他们枕边的柜台。
+
+Obviously most of these people are not succeeding. The maths simply can never work out. That is part of the trick. The aspiring influencer with forty-seven followers is not an entrepreneur in any meaningful sense. He is free labour for the platform and cheap distribution for the person selling him the dream. The affiliate marketer buys a course about affiliate marketing, then recovers the cost by selling the same course to the next affiliate marketer. The life coach coaches new life coaches. The dropshipper sells tutorials to failed dropshippers. The pyramid is social before it is financial. Everyone stands on someone else while insisting they are about to escape.
+显然，这些人中的大多数并没有成功。数学逻辑根本行不通，但这正是骗局的一部分。那个拥有 47 个粉丝的“准网红”在任何意义上都不是企业家。他是平台的免费劳动力，也是向他兜售梦想之人的廉价分销渠道。联盟营销人员购买关于联盟营销的课程，然后通过将同样的课程卖给下一个联盟营销人员来收回成本。人生导师指导新的人生导师。代发货商（dropshipper）向失败的代发货商兜售教程。这个金字塔在金融层面之前，首先是社交层面的。每个人都踩在别人头上，同时坚称自己即将逃离。
+
+This arrangement blurs the useful moral distinction between predator and prey. Many online grifters are themselves marks. They believe the rubbish they sell because belief makes the selling bearable. They have sunk money, time, identity, and public dignity into the scheme. Admitting the product is worthless would mean admitting that years of their life were worthless too. It is psychologically cheaper to recruit another victim. The fraud sustains the faith, and the faith sustains the fraud.
+这种安排模糊了掠夺者与猎物之间本应有的道德界限。许多网络骗子本身也是受害者。他们相信自己兜售的垃圾，因为信念让这种推销变得可以忍受。他们已经在骗局中投入了金钱、时间、身份和公众尊严。承认产品毫无价值，就意味着承认他们生命中的多年时光也毫无价值。在心理上，招募下一个受害者成本更低。欺诈维持了信仰，而信仰又维持了欺诈。
+
+A normal trade ends when a need is satiated. You need a chair. Someone sells you a chair. You sit down and stop thinking about chairs. However, an online grift can never satiate. It must preserve the need that feeds it. The grievance merchant cannot resolve your grievance. The wellness influencer cannot let you feel well. The trading guru cannot let you become financially secure. The manosphere podcaster cannot let young men become calm, loved, and socially competent. Satisfaction is churn. Misery is recurring revenue.
+正常的交易在需求满足时就会结束。你需要一把椅子，有人卖给你，你坐下后就不会再想椅子了。然而，网络骗局永远无法满足需求。它必须维持滋养它的那种需求。贩卖不满的人无法解决你的不满；健康网红无法让你真正健康；交易大师无法让你实现财务安全；“男权圈”（manosphere）播客无法让年轻男性变得冷静、被爱且具备社交能力。满足感意味着客户流失，而痛苦则是经常性收入。
+
+The platforms did not invent fear, greed, loneliness, or status anxiety. They industrialised their extraction. Their recommendation systems are vast reinforcement-learning loops that continuously experiment on human weakness. Each objective is a moving composite of high-dimensional signals for attention, retention, and conversion, dispersed across models, metrics, tests, and feedback systems. The subject cannot see the experiment. The operator cannot fully explain it. The regulator can barely comprehend it. The loop knows only that one stimulus keeps a person scrolling while another lets them leave. Calm accuracy loses. Threat, transgression, humiliation, and impossible promises win. The resulting social damage appears nowhere in the objective function. It arrives as an externality. This creates a brutal selection environment. The honest financial adviser explains diversification...
+平台并没有发明恐惧、贪婪、孤独或地位焦虑，它们只是将这些情绪的榨取工业化了。它们的推荐系统是庞大的强化学习循环，不断地在人类弱点上进行实验。每一个目标都是高维信号的动态组合，用于衡量注意力、留存率和转化率，并分散在各种模型、指标、测试和反馈系统中。实验对象看不见实验，操作者无法完全解释它，监管者几乎无法理解它。这个循环只知道：某种刺激能让人继续刷屏，而另一种则会让人离开。冷静的准确性会输，而威胁、越界、羞辱和不可能的承诺会赢。由此产生的社会损害在目标函数中无处体现，它作为一种外部性出现。这创造了一个残酷的筛选环境。诚实的财务顾问解释多元化……
