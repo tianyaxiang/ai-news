@@ -1,0 +1,38 @@
+---
+title: "The weird and wonderful headphones of CanJam 2026"
+originalUrl: "https://www.theverge.com/tech/990706/a-day-at-canjam-socal-2026"
+date: "2026-09-05T23:01:45.020Z"
+---
+
+# The weird and wonderful headphones of CanJam 2026
+# 2026年 CanJam 耳机展：奇特而美妙的耳机世界
+
+A collection of headphone manufacturers and fans come together for their love of great sound. Image: CanJam Global
+一群耳机制造商和发烧友因对卓越音质的热爱而汇聚一堂。图片来源：CanJam Global
+
+I’ve been reviewing headphones for a long time, and I’ve listened to everything from the barely serviceable to multi-thousand-dollar open-back headphones. But recently I’ve been uninspired by the state of mainstream options. Most are perfectly good — great, even — but they lack a distinct character. Something to remind me why I fell in love with headphones to begin with, landing me in this crazy career. I needed some revitalization. I needed to see something cool. I needed to be around other people with an emotional connection to headphones. I needed to go to CanJam.
+我评测耳机已经很长时间了，从勉强能用的入门产品到数千美元的开放式耳机，我几乎都听过。但最近，主流耳机的现状让我感到乏味。它们大多表现得非常出色，甚至可以说是优秀，但却缺乏鲜明的个性。我需要一些东西来提醒我当初为何会爱上耳机，并投身于这份疯狂的职业。我需要重拾热情，需要看到一些酷炫的东西，需要置身于那些对耳机有着情感共鸣的人群中。我需要去 CanJam。
+
+CanJam is a small audio show produced by Head-Fi.org, the largest audio-focused online forum, with multiple events a year at different places around the world, including London, Shanghai, New York City, Dubai, and Southern California. It’s where mainly boutique manufacturers exhibit their latest headphones and related gear to enthusiasts constantly searching for the most accurate and engaging audio experience they can find. You won’t find Bose or Apple here — although Sony’s Pro division was there, as were some familiar names like Sennheiser and Audeze.
+CanJam 是由全球最大的音频论坛 Head-Fi.org 主办的小型音频展，每年在全球不同城市举办多场活动，包括伦敦、上海、纽约、迪拜和南加州。在这里，主要是精品制造商向那些不断追求最精准、最动听音频体验的发烧友展示其最新耳机及相关设备。你在这里找不到 Bose 或 Apple——尽管索尼的专业部门以及森海塞尔 (Sennheiser) 和奥帝兹 (Audeze) 等一些熟悉的名字也在场。
+
+CanJam SoCal 2026 was in a convention space at the Irvine Marriott. Most exhibitors — including larger audio names like Sennheiser, Focal, and HiFiMan as well as niche brands like Astell&Kern and Noble Audio — had booths in the biggest room. Many set up listening stations with tablets running Qobuz (the streaming service of choice for audiophiles because of its hi-res lossless audio) to demonstrate their headphones, DACs, amps, media players, and even cables. Others were in quieter rooms off the main hallway, more conducive to listening. And crowding into those rooms and booths were a couple thousand audio enthusiasts.
+2026年南加州 CanJam 在尔湾万豪酒店的会议空间举行。大多数参展商——包括森海塞尔、Focal 和海菲曼 (HiFiMan) 等大型音频品牌，以及 Astell&Kern 和 Noble Audio 等小众品牌——都在最大的展厅设有展位。许多展位设置了试听台，配备运行 Qobuz（因其高解析度无损音频而成为发烧友首选的流媒体服务）的平板电脑，以展示他们的耳机、DAC、放大器、媒体播放器甚至线材。其他一些展商则位于主走廊旁更安静的房间里，更适合聆听。成千上万的音频发烧友挤满了这些房间和展位。
+
+The Chimera look gorgeous, but are bigger than most other in-ears. Image: Campfire Audio
+Chimera 耳机外观华丽，但比大多数其他入耳式耳机都要大。图片来源：Campfire Audio
+
+My first stop was the Campfire Audio booth. Campfire Audio builds earbuds in Portland, Oregon; I’ve listened to its $1,500 Solaris and $300 IO in-ear monitors in the past. Today, though, was for an in-ear monitor that debuted at CanJam Singapore in May: the Campfire Audio Chimera. Most mainstream earbuds and headphones have a single driver per ear that has to reproduce every frequency from the lowest bass to the highest treble. Two if you’re lucky. The Chimeras have nine. It’s a “quad-brid” design, meaning they use four different types of audio delivery in a single IEM: a dynamic driver for bass and lower mids; a dual-diaphragm balanced armature (BA) for midrange clarity and two more for the high end; four electrostatic tweeters to add high-end air and spaciousness; and bone conduction for extra bass.
+我的第一站是 Campfire Audio 的展位。Campfire Audio 在俄勒冈州波特兰市制造耳机；我过去曾听过他们 1500 美元的 Solaris 和 300 美元的 IO 入耳式监听耳机。但今天，我的目标是一款在五月新加坡 CanJam 上首次亮相的入耳式监听耳机：Campfire Audio Chimera。大多数主流耳塞和耳机每侧只有一个驱动单元，必须负责从最低低音到最高高音的所有频率。运气好的话会有两个。而 Chimera 有九个。这是一种“四混合”设计，意味着它们在单个入耳式耳机中使用了四种不同的音频传输方式：一个用于低音和中低音的动圈单元；一个用于中频清晰度的双振膜动铁单元 (BA) 以及另外两个用于高频的动铁单元；四个用于增加高频空气感和空间感的静电高音单元；以及用于增强低音的骨传导单元。
+
+Because of the number of drivers, the Chimera are chonky: about the size of a piece of Bubblicious bubble gum. It took some finagling to get them comfortably in place. Once I did, though, I was immediately impressed. The low end was nice and full, without getting muddy or overpowering the frequencies above. An open high end gave space to allow cymbals to shimmer and decay while avoiding any abrasiveness. The real star, though, was the midrange. Both the quiet, conversational passages of Tracy Chapman and passionate wailing of Janis Joplin sounded as if they were right there in front of me. Even though I was listening while standing in a conference hall, the Chimera delivered one of the most detailed and enjoyable listening sessions I’ve had in a long time. But they’re also $7,500.
+由于驱动单元数量众多，Chimera 的体积很大：大约有一块 Bubblicious 泡泡糖那么大。我费了一番功夫才让它们舒适地佩戴好。不过一旦戴好，我立刻就被震撼了。低频表现饱满悦耳，既不会浑浊，也不会掩盖中高频。开阔的高频为镲片的闪烁和衰减留出了空间，同时避免了任何刺耳感。然而，真正的明星是中频。无论是 Tracy Chapman 安静的谈话式段落，还是 Janis Joplin 充满激情的呐喊，听起来都仿佛就在我面前。尽管我是在会议大厅里站着试听，但 Chimera 还是带来了我很久以来最详细、最愉悦的聆听体验之一。但它们的价格也高达 7500 美元。
+
+That pricing isn’t unheard of in the audiophile world — boutique, hand-built audio gear is always more expensive — but the Chimera are at another level, even compared to the rest of Campfire’s lineup. In addition to the design and engineering necessary to create a small(ish) in-ear with nine drivers all working together, much of that price is also because of materials and manufacturing. They have a carbon fiber and brass Damascus construction, with folded layers that create a topographical map design. And because of that process, the slight variations in finish make each Chimera unique. They also have a six-conductor cable that by itself is more expensive than most people’s earbuds, and include a microfiber cloth, IEM cleaning tool, and nine different tip options.
+在发烧友圈子里，这个价格并不罕见——精品手工音频设备总是更昂贵——但即使与 Campfire 的其他产品线相比，Chimera 也处于另一个层面。除了将九个驱动单元整合进一个小巧（相对而言）的入耳式耳机所需的工程设计外，高昂的价格很大程度上也源于材料和制造工艺。它们采用碳纤维和大马士革黄铜结构，折叠层营造出地形图般的设计感。由于这种工艺，每一副 Chimera 的外观细节都会略有不同，使其独一无二。它们还配有一根六芯线材，单是这根线就比大多数人的整副耳机还要贵，包装内还附赠超细纤维布、入耳式耳机清洁工具以及九种不同的耳塞套选项。
+
+Planar magnetic headphones are big, but the detail they provide is incredible. Photo by John Higgins / The Verge
+平板磁式耳机体积很大，但它们提供的细节令人难以置信。摄影：John Higgins / The Verge
+
+Not every product at CanJam is that far out of reach, though. Fosi Audio had wired in-ears for under $150 that sounded good for the price, plus an interesting portable CD player. The Dan Clark Audio Aeon Core planar magnetic headphones — which aren’t cheap at $900, but still more accessible than the Chimera — had a nice, wide soundstage, where the background vocals in the Black Crowes’ “Remedy” wrapped around to sing from my left and right, with Chris Robinson in front. Snare hits snapped and cymbals sizzled, although on “Fast Car” by Tracy Chapman the snare verged on being too much. I’ve been a fan of Dan Clark Audio headphones since the company was MrSpeakers, and I could easily envision myself relaxing on the couch...
+不过，CanJam 上的每件产品并非都遥不可及。Fosi Audio 展出了价格不到 150 美元的有线入耳式耳机，音质对得起价格，此外还有一款有趣的便携式 CD 播放器。Dan Clark Audio 的 Aeon Core 平板磁式耳机——虽然 900 美元的价格并不便宜，但比 Chimera 更容易入手——拥有宽广悦耳的声场，Black Crowes 的《Remedy》中，背景人声环绕在我的左右两侧，而 Chris Robinson 的主唱则位于正前方。小鼓声清脆，镲片声嘶嘶作响，尽管在 Tracy Chapman 的《Fast Car》中，小鼓声略显过头。自从这家公司还叫 MrSpeakers 时，我就一直是 Dan Clark Audio 耳机的粉丝，我很容易就能想象自己躺在沙发上放松……
