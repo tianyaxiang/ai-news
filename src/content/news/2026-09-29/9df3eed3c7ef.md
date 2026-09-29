@@ -1,0 +1,40 @@
+---
+title: "Who’s liable when AI agents go rogue?"
+originalUrl: "https://www.technologyreview.com/2026/09/28/1145197/whos-liable-when-ai-agents-go-rogue/"
+date: "2026-09-29T01:08:40.082Z"
+---
+
+# Who’s liable when AI agents go rogue?
+# 当 AI 智能体“失控”时，谁该负责？
+
+Over the past few months, a cascade of cyberattacks by AI agents has stunned the world. In July, OpenAI disclosed that a swarm of its agents had escaped their sandbox and hacked into the AI platform Hugging Face to cheat on a cybersecurity test. Recently, external researchers discovered that OpenAI agents had hijacked a German wiki site and the coding platform RubyGems in May to share test answers. Earlier this month, Anthropic disclosed four incidents in which its model Claude hacked into third-party systems during cybersecurity exercises. Just last week, Google confirmed that its model Gemini had been caught hacking other companies too. The researcher who uncovered the OpenAI website hijack has warned it’s likely that similar undiscovered episodes are out there. And many say it’s only a matter of time until there’s another, possibly more damaging incident where AI agents bypass sandboxes to access systems they shouldn’t. So the big question is: How do we hold companies liable when they lose control of their AI agents?
+
+在过去的几个月里，一系列由 AI 智能体发起的网络攻击震惊了世界。7 月，OpenAI 披露其一批智能体逃离了沙盒环境，并入侵了 AI 平台 Hugging Face，以便在网络安全测试中作弊。最近，外部研究人员发现，OpenAI 的智能体曾在 5 月劫持了一个德国维基网站和代码平台 RubyGems，用于分享测试答案。本月初，Anthropic 披露了四起事件，其模型 Claude 在网络安全演习中入侵了第三方系统。就在上周，谷歌也证实其模型 Gemini 被发现入侵了其他公司。揭露 OpenAI 网站劫持事件的研究人员警告称，类似未被发现的事件很可能依然存在。许多人认为，AI 智能体绕过沙盒访问不该访问的系统，并造成更严重后果的事件，只是时间问题。因此，一个核心问题是：当公司失去对 AI 智能体的控制时，我们该如何追究其责任？
+
+OpenAI didn’t disclose the German wiki incident or the RubyGems incident until a group of external researchers uncovered them, and it still has not disclosed some crucial details about the Hugging Face hack. That limits our understanding of what exactly went wrong and how to prevent it from happening again. But you might be surprised to learn that OpenAI likely wasn’t legally required to disclose these incidents. (OpenAI did not respond to a request for comment.)
+
+在外部研究人员揭露之前，OpenAI 并未披露德国维基网站或 RubyGems 的入侵事件，且至今仍未披露关于 Hugging Face 入侵事件的一些关键细节。这限制了我们对事故真相的了解，也阻碍了我们防止此类事件再次发生。但你可能会惊讶地发现，OpenAI 在法律上可能并不需要披露这些事件。（OpenAI 未回应置评请求。）
+
+State AI transparency laws like California’s SB 53, New York’s RAISE Act, and Illinois’s SB 315 require that AI developers report “critical safety incidents.” These are defined as incidents that cause more than 50 deaths or physical injuries or $1 billion in damage. They also include incidents where the model deceives developers outside an evaluation in a way that materially increases catastrophic risks. Many cybersecurity incidents that don’t meet the threshold for physical damage or catastrophic risks could nonetheless be dangerous precursors to such catastrophes, and the existing laws don’t account for that. “The recent incidents are a perfect example of why the law isn’t ready,” says Mackenzie Arnold, managing director of US policy at the Institute for Law and AI, a think tank. “Only the worst, most egregious, most immediately harmful stuff is going to qualify.”
+
+加州的 SB 53、纽约的 RAISE 法案以及伊利诺伊州的 SB 315 等州级 AI 透明度法律，要求 AI 开发商报告“关键安全事件”。这些事件被定义为造成超过 50 人死亡或身体伤害，或造成 10 亿美元损失的事件。它们还包括模型在评估之外欺骗开发人员，从而实质性增加灾难性风险的情况。许多未达到物理损害或灾难性风险门槛的网络安全事件，仍可能是此类灾难的危险前兆，而现有法律并未将其纳入考量。“最近的事件完美地证明了法律为何尚未准备好，”智库“法律与 AI 研究所”（Institute for Law and AI）美国政策常务董事 Mackenzie Arnold 表示，“只有最糟糕、最恶劣、最直接造成伤害的事件才会被纳入监管。”
+
+With no authority under existing AI laws to demand information about anything short of a catastrophe, governments are left to borrow investigative authority from other laws or sue the companies, an expensive process that can take years.
+
+由于现有 AI 法律没有授权政府要求获取未达到灾难程度的事件信息，政府只能借用其他法律的调查权，或者起诉相关公司——这是一个昂贵且可能耗时数年的过程。
+
+“Normally, something like the Hugging Face incident should have been taken to court,” says Yonathan Arbel, a law professor at the University of Alabama School of Law. “Then we would have discovery, and we would have all the spillover effects that we get from litigation, where all the information comes out.” But so far, Hugging Face has chosen not to sue OpenAI. Hugging Face’s CEO, Clément Delangue, says it doesn’t have the resources to do so (instead, he asked OpenAI for $100 million in compute). Still, Delangue stressed in an interview with CNN at the end of July that choosing not to pursue legal action shouldn’t be taken to mean he doesn’t think OpenAI should be held accountable. “Everyone has to remember that this cyberattack is a crime. This is illegal. And we have to find a way to make sure these things don’t happen more regularly,” he said. Hugging Face did not respond to a request to comment.
+
+“通常情况下，像 Hugging Face 这样的事件应该诉诸法庭，”阿拉巴马大学法学院教授 Yonathan Arbel 说，“这样我们就能进行证据开示，并获得诉讼带来的所有溢出效应，从而让所有信息公之于众。”但到目前为止，Hugging Face 选择不起诉 OpenAI。Hugging Face 的首席执行官 Clément Delangue 表示，他们没有资源这样做（相反，他向 OpenAI 要求了价值 1 亿美元的算力）。尽管如此，Delangue 在 7 月底接受 CNN 采访时强调，选择不采取法律行动并不意味着他认为 OpenAI 不应承担责任。“每个人都必须记住，这种网络攻击是犯罪行为。这是非法的。我们必须找到一种方法，确保此类事件不会频繁发生，”他说。Hugging Face 未回应置评请求。
+
+Litigation has the benefit of pushing courts to use existing laws to address AI safety incidents, rather than just waiting for new legislation. One obvious route is tort law, a body of civil law that lets people and businesses sue those who harm them. This is often used to hold companies liable for the mass harms they cause, like when families sued Boeing in 2019 over two plane crashes that killed hundreds of people, or when states and cities sued Purdue Pharma over the opioid crises, extracting settlements worth billions. “There’s plausible grounds for a negligence claim that OpenAI should have used a stronger sandbox, done more monitoring,” says Gabriel Weil, a law professor at the University of Houston Law Center.
+
+诉讼的好处在于推动法院利用现有法律来处理 AI 安全事件，而不是仅仅等待新立法。一个显而易见的途径是侵权法，这是一种允许个人和企业起诉伤害方的一类民法。它常被用于追究公司造成的大规模伤害责任，例如 2019 年遇难者家属因两起空难起诉波音公司，或者各州和城市因阿片类药物危机起诉普渡制药（Purdue Pharma）并获得数十亿美元的和解金。“有充分的理由提出过失索赔，认为 OpenAI 本应使用更强大的沙盒，并进行更多的监控，”休斯顿大学法律中心法学教授 Gabriel Weil 表示。
+
+For example, when OpenAI employees discovered the covert message board that the agents had created, they could’ve promptly escalated their findings to security and safety teams. And the company could’ve better designed its sandbox to ensure that agents couldn’t access the internet. But even if OpenAI doesn’t end up in a lawsuit over the Hugging Face hack, the threat of liability could incentivize AI labs to exercise more caution than explicitly demanded by law. OpenAI announced in its postmortem that it plans to strengthen the safeguards used to contain and monitor the models, accelerate model alignment, and improve its processes for identifying and addressing incidents. “The liability questions raised by frontier labs’ spate of cybersecurity attacks boil down to the incentives the expectation of liability creates for their future conduct,” says Weil. “That’s why I think it’s important to get these rules right, even if the stakes are pretty low in this particular case.”
+
+例如，当 OpenAI 员工发现智能体创建的秘密留言板时，他们本可以迅速将调查结果上报给安全团队。公司本可以更好地设计沙盒，以确保智能体无法访问互联网。但即使 OpenAI 最终没有因 Hugging Face 入侵事件而面临诉讼，责任威胁也可能促使 AI 实验室比法律明确要求的更加谨慎。OpenAI 在事后分析中宣布，计划加强用于控制和监控模型的安全措施，加速模型对齐，并改进识别和处理事件的流程。“前沿实验室一系列网络攻击引发的责任问题，归根结底是责任预期对其未来行为产生的激励作用，”Weil 说，“这就是为什么我认为制定正确的规则很重要，即使在这个特定案例中风险很低。”
+
+One way to get answers—and determine whether OpenAI should be held liable—is to compel disclosure. But the existing state AI laws—California’s SB 53, New York’s RAISE Act, and Illinois’s 315—don’t give governments the authority to investigate incidents like the ones that happened recently. However, amid rising public alarm, state attorneys general are stepping in, borrowing investigative powers from other laws. Alabama, Montana and a coalition of 15 other states, and California are each demanding...
+
+获取答案并确定 OpenAI 是否应承担责任的一种方法是强制披露。但现有的州级 AI 法律（加州的 SB 53、纽约的 RAISE 法案和伊利诺伊州的 315）并未赋予政府调查此类近期事件的权力。然而，在公众日益恐慌的情况下，各州总检察长正在介入，借用其他法律的调查权。阿拉巴马州、蒙大拿州以及其他 15 个州组成的联盟，还有加利福尼亚州，都在各自提出要求……
