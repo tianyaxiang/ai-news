@@ -84,6 +84,7 @@ const webGenericPlugin: SourcePlugin = {
         url: fullUrl,
         content: content || title,
         date: new Date(),
+        dateKnown: false,
         source: config.name,
       });
     });

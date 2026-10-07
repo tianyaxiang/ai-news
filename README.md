@@ -246,3 +246,11 @@ ai-news/
 ## License
 
 MIT
+
+### Reliability and reading improvements
+
+Generation fixes the report date in Asia/Shanghai, filters a configurable 48-hour window ending at the end of that report date, and deduplicates against previously published reports while retaining meaningful URL parameters. Use `ALLOW_REPEATS=1` for intentional updates and `FORCE_REGEN=1` to replace an existing report. Existing reports skip fetching and AI calls.
+
+Summaries are generated in bounded batches with ID/count validation; highlights reference those summaries. Title-only stories link to their source instead of inventing a summary. Long translations are explicitly labeled as excerpts. New reports store structured metadata alongside compatible Markdown. The home page includes latest highlights, monthly archives, and on-demand search; new reports support topic filters and collapsible summaries.
+
+Run `pnpm check`, `pnpm test`, and `pnpm build` before publishing. Tests mock generation and notifications. `.cache/run-summary.json` records outcomes, failures, timings, token usage, and translation cache hits; Actions saves it as an artifact for 30 days. See `.env.example` and the Chinese README for tuning options.

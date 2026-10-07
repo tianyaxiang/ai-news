@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "generate": "tsx scripts/main.ts"
+    "generate": "tsx scripts/main.ts",
+    "check": "astro check && tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts tests/*.test.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^1.0.0",
@@ -23,6 +25,8 @@
     "rss-parser": "^3.13.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^22",
     "tsx": "^4.0.0",
     "typescript": "^5.7.0"
   },

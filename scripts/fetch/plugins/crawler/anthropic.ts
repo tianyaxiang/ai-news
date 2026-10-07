@@ -42,14 +42,14 @@ const anthropicPlugin: SourcePlugin = {
         $el.find('[class*="__subject"]').first().text()
       ).trim();
       const content = $el.find('p').first().text().replace(/\s+/g, ' ').trim() || title;
-      const dateText = $el.find('time').first().text().trim();
+      const dateText = $el.find('time').first().attr('datetime') || $el.find('time').first().text().trim();
       const parsed = dateText ? new Date(dateText) : null;
       const date = parsed && !isNaN(parsed.getTime()) ? parsed : new Date();
 
       const tags = ['anthropic'];
       if (category) tags.push(category.toLowerCase());
 
-      articles.push({ title, url, content, date, source: config.name, tags });
+      articles.push({ title, url, content, date, dateKnown: Boolean(parsed && !isNaN(parsed.getTime())), source: config.name, tags });
     });
 
     if (articles.length === 0) {

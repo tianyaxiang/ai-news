@@ -1,0 +1,28 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { extractHighlights, plainText } from '../../lib/digest.mjs';
+export async function getStaticPaths() {
+  const posts = (await getCollection('daily')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+  const months = [...new Set(posts.map(post => post.data.date.slice(0, 7)))];
+  return months.map((month, index) => ({ params: { month }, props: { posts: posts.filter(post => post.data.date.startsWith(month)), newer: months[index - 1], older: months[index + 1] } }));
+}
+const { posts, newer, older } = Astro.props;
+---
+<Layout title={`${Astro.params.month} 新闻归档 - AI News Daily`} backUrl="/">
+  <h1>{Astro.params.month} 新闻归档</h1>
+  {posts.map(post => <article>
+    <h2><a href={`/daily/${post.id}`}>{post.data.date}</a></h2>
+    <p>{plainText((post.data.highlights || extractHighlights(post.body))[0] || post.data.title)}</p>
+  </article>)}
+  <nav aria-label="月份导航">
+    {newer && <a href={`/archive/${newer}`}>← {newer}</a>}
+    <a href="/">返回首页</a>
+    {older && <a href={`/archive/${older}`}>{older} →</a>}
+  </nav>
+</Layout>
+<style>
+  article { border-bottom: 1px solid var(--color-border); padding: .75rem 0; }
+  h2 { font-size: 1.1rem; border: 0; }
+  nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 2rem; }
+</style>

@@ -50,6 +50,7 @@ const githubTrendingPlugin: SourcePlugin = {
         url: fullUrl,
         content: content || title, // fallback to title if repo has no description
         date: new Date(),
+        dateKnown: false,
         source: config.name,
         tags,
       });

@@ -1,72 +1,49 @@
 import { HttpsProxyAgent } from 'https-proxy-agent';
+import { setting } from './lib/runtime.js';
 
-const proxyUrl =
-  process.env.HTTPS_PROXY ||
-  process.env.HTTP_PROXY ||
-  process.env.https_proxy ||
-  process.env.http_proxy ||
-  process.env.ALL_PROXY ||
-  process.env.all_proxy;
+const proxyUrl = process.env.HTTPS_PROXY || process.env.HTTP_PROXY || process.env.https_proxy || process.env.http_proxy || process.env.ALL_PROXY || process.env.all_proxy;
+const proxyAgent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : undefined;
+if (proxyAgent) console.log('[proxy] Proxy enabled');
 
-let proxyAgent: HttpsProxyAgent<string> | undefined;
-
-if (proxyUrl) {
-  console.log(`[proxy] Using proxy: ${proxyUrl}`);
-  proxyAgent = new HttpsProxyAgent(proxyUrl);
+async function fetchOnce(url: string | URL | Request, init: RequestInit): Promise<Response> {
+  if (!proxyAgent) return fetch(url, init);
+  const nodeFetch = (await import('node-fetch')).default;
+  return await nodeFetch(url.toString(), { ...(init as any), agent: proxyAgent }) as unknown as Response;
 }
 
-async function fetchOnce(
-  url: string | URL | Request,
-  init?: RequestInit,
-): Promise<Response> {
-  if (!proxyAgent) {
-    return fetch(url, init);
+export function retryDelay(header: string | null, attempt: number, now = Date.now()): number {
+  if (header) {
+    const seconds = Number(header);
+    const ms = Number.isFinite(seconds) ? seconds * 1000 : Date.parse(header) - now;
+    if (Number.isFinite(ms)) return Math.min(30000, Math.max(0, ms));
   }
-
-  try {
-    const nodeFetch = (await import('node-fetch')).default;
-    const res = await nodeFetch(url.toString(), {
-      ...(init as any),
-      agent: proxyAgent,
-    });
-    return res as unknown as Response;
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.warn(`[proxy] node-fetch failed for ${url.toString().slice(0, 60)}..., fallback to native fetch: ${msg}`);
-    return fetch(url, init);
-  }
+  return Math.min(10000, 1000 * 2 ** attempt) + Math.floor(Math.random() * 250);
 }
 
-/**
- * Fetch wrapper with automatic proxy support and retry.
- */
-export async function proxyFetch(
-  url: string | URL | Request,
-  init?: RequestInit & { retries?: number },
-): Promise<Response> {
-  const maxRetries = init?.retries ?? 2;
-  let lastError: Error | undefined;
-
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+/** Each attempt has a fresh timeout. The signal also bounds response body reads. */
+export async function proxyFetch(url: string | URL | Request, init: RequestInit & { retries?: number; timeoutMs?: number } = {}): Promise<Response> {
+  const { retries = 2, timeoutMs = setting('FETCH_TIMEOUT_MS', 15000, 120000), ...options } = init;
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    options.signal?.throwIfAborted();
+    let delay = retryDelay(null, attempt);
     try {
-      const res = await fetchOnce(url, init);
-      if (res.ok || attempt === maxRetries) return res;
-      // Retry on server errors (5xx)
-      if (res.status >= 500) {
-        lastError = new Error(`HTTP ${res.status}`);
-      } else {
-        return res; // Don't retry client errors (4xx)
-      }
+      const timeout = AbortSignal.timeout(timeoutMs);
+      const signal = options.signal ? AbortSignal.any([options.signal, timeout]) : timeout;
+      const res = await fetchOnce(url, { ...options, signal });
+      if ((res.status !== 429 && res.status < 500) || attempt === retries) return res;
+      delay = retryDelay(res.headers.get('retry-after'), attempt);
+      // Drain the response while its timeout is active before retrying.
+      await res.arrayBuffer().catch(() => {});
+      lastError = new Error(`HTTP ${res.status}`);
     } catch (err) {
-      lastError = err instanceof Error ? err : new Error(String(err));
+      lastError = err;
+      options.signal?.throwIfAborted();
     }
-
-    if (attempt < maxRetries) {
-      const delay = 1000 * (attempt + 1);
-      console.warn(`[proxy] Retry ${attempt + 1}/${maxRetries} for ${url.toString().slice(0, 60)}... (waiting ${delay}ms)`);
-      await new Promise(r => setTimeout(r, delay));
+    if (attempt < retries) {
+      console.warn(`[fetch] Retry ${attempt + 1}/${retries} in ${delay}ms`);
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
-
-  throw lastError ?? new Error(`Failed to fetch ${url}`);
+  throw lastError ?? new Error('Request failed');
 }

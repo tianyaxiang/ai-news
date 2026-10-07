@@ -1,5 +1,6 @@
 import { registry } from './registry.js';
 import type { SourceConfig, FetchResult } from './types.js';
+import { mapLimit, setting } from '../lib/runtime.js';
 
 // Import and register built-in plugins
 import rssPlugin from './plugins/rss.js';
@@ -17,9 +18,8 @@ registry.register(githubTrendingPlugin);
 registry.register(anthropicPlugin);
 
 export async function fetchSource(config: SourceConfig): Promise<FetchResult> {
-  const plugin = registry.getOrThrow(config.plugin);
-
   try {
+    const plugin = registry.getOrThrow(config.plugin);
     console.log(`[fetch] ${config.name} (${config.plugin})...`);
     const articles = await plugin.fetch(config);
     console.log(`[fetch] ${config.name}: ${articles.length} articles`);
@@ -44,19 +44,7 @@ export async function fetchAll(sources: SourceConfig[]): Promise<FetchResult[]> 
   const enabled = sources.filter(s => s.enabled !== false);
   console.log(`[fetch] Fetching from ${enabled.length} sources...`);
 
-  const results = await Promise.allSettled(
-    enabled.map(source => fetchSource(source))
-  );
-
-  return results.map((result, i) => {
-    if (result.status === 'fulfilled') return result.value;
-    return {
-      source: enabled[i].name,
-      articles: [],
-      fetchedAt: new Date(),
-      error: result.reason?.message ?? 'Unknown error',
-    };
-  });
+  return mapLimit(enabled, setting('SOURCE_CONCURRENCY', 6, 24), fetchSource);
 }
 
 export { registry } from './registry.js';

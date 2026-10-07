@@ -1,0 +1,60 @@
+---
+interface Props {
+  date: string;
+  highlights: string[];
+  articles: { id: number; title: string; titleZh: string; summary: string; source: string; topic: string; url: string; originalUrl: string; evidence: string }[];
+}
+const { date, highlights, articles } = Astro.props;
+const topics = [...new Set(articles.map(article => article.topic))];
+---
+<section class="highlights">
+  <p>{date} · {articles.length} 篇资讯</p>
+  <h1>今日要点</h1>
+  {highlights.length ? <ul>{highlights.map(text => <li>{text}</li>)}</ul> : <p>暂无足够正文提炼要点，请查看下方原文链接。</p>}
+</section>
+<div class="filters">
+  <label>筛选主题 <select id="article-topic"><option value="">全部主题</option>{topics.map(topic => <option>{topic}</option>)}</select></label>
+  <button id="toggle-summaries" type="button" aria-expanded="true">收起全部摘要</button>
+</div>
+<p id="article-count" aria-live="polite">共 {articles.length} 篇</p>
+<section aria-label="新闻列表">
+  {articles.map(article => (
+    <article class="digest-card" data-topic={article.topic}>
+      <p class="source">{article.source} · {article.topic}{article.evidence === 'title' ? ' · 仅标题' : ''}</p>
+      <h2><a href={article.url}>{article.titleZh}</a></h2>
+      {article.titleZh !== article.title && <p class="original-title">{article.title}</p>}
+      <details open><summary>新闻摘要</summary><p>{article.summary}</p></details>
+      <a href={article.url}>阅读全文 →</a>
+      {article.url !== article.originalUrl && <a class="original" href={article.originalUrl} target="_blank" rel="noopener noreferrer">查看原文 ↗</a>}
+    </article>
+  ))}
+</section>
+<style>
+  .highlights { padding: 1.25rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; }
+  h1 { font-size: 1.5rem; margin: .5rem 0; }
+  li { margin: .65rem 0; line-height: 1.8; }
+  .filters { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin: 1.5rem 0 .5rem; }
+  select, button { font: inherit; color: var(--color-text); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 6px; padding: .5rem; }
+  .digest-card { padding: 1.25rem; border: 1px solid var(--color-border); border-radius: 10px; margin: 1rem 0; }
+  h2 { font-size: 1.15rem; margin: .5rem 0; border: 0; }
+  .source, .original-title { color: var(--color-text-muted); font-size: .85rem; }
+  details { margin: .75rem 0; }
+  summary { cursor: pointer; color: var(--color-text-muted); }
+  .original { margin-left: 1rem; }
+  [hidden] { display: none; }
+</style>
+<script>
+  const filter = document.querySelector<HTMLSelectElement>('#article-topic');
+  const cards = [...document.querySelectorAll<HTMLElement>('.digest-card')];
+  filter?.addEventListener('change', () => {
+    cards.forEach(card => { card.hidden = !!filter.value && card.dataset.topic !== filter.value; });
+    document.getElementById('article-count')!.textContent = `共 ${cards.filter(card => !card.hidden).length} 篇`;
+  });
+  const toggle = document.querySelector<HTMLButtonElement>('#toggle-summaries');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') !== 'true';
+    cards.forEach(card => { card.querySelector('details')!.open = open; });
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.textContent = open ? '收起全部摘要' : '展开全部摘要';
+  });
+</script>

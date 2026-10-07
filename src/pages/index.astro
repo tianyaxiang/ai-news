@@ -1,93 +1,89 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { extractHighlights, plainText } from '../lib/digest.mjs';
 
-const dailyPosts = await getCollection('daily');
-const sorted = dailyPosts.sort((a, b) => b.data.date.localeCompare(a.data.date));
+const sorted = (await getCollection('daily')).sort((a, b) => b.data.date.localeCompare(a.data.date));
+const latest = sorted[0];
+const highlights = latest ? (latest.data.highlights || extractHighlights(latest.body)).map(plainText) : [];
+const months = [...new Set(sorted.map(post => post.data.date.slice(0, 7)))];
 ---
-
 <Layout title="AI News Daily - AI 新闻日报">
   <section class="hero">
     <h1>AI News Daily</h1>
-    <p class="subtitle">AI 驱动的每日科技新闻聚合，中英双语</p>
-    <p class="meta">Auto-generated from Hacker News, TechCrunch, The Verge, and more.</p>
+    <p>每日科技新闻、中文摘要与今日要点</p>
   </section>
-
-  {sorted.length === 0 ? (
-    <section class="empty">
-      <p>No daily reports yet. The first report will be generated automatically.</p>
-      <p>还没有日报。第一份日报将会自动生成。</p>
-    </section>
-  ) : (
-    <section class="post-list">
-      {sorted.map((post) => (
-        <a href={`/daily/${post.id}`} class="post-card">
-          <time datetime={post.data.date}>{post.data.date}</time>
-          <h2>{post.data.title}</h2>
-        </a>
-      ))}
-    </section>
-  )}
+  {latest ? <section class="latest">
+    <p>{latest.data.date} · 最新日报</p>
+    <h2>今日要点</h2>
+    <ul>{highlights.map(text => <li>{text}</li>)}</ul>
+    <a href={`/daily/${latest.id}`}>阅读完整日报 →</a>
+  </section> : <p>还没有日报，生成后会显示在这里。</p>}
+  <section class="search" aria-label="查找历史新闻">
+    <h2>查找新闻</h2>
+    <label for="news-query">搜索新闻标题、要点或来源</label>
+    <input id="news-query" type="search" placeholder="例如：Claude、开源模型、Hacker News" />
+    <p id="search-status" role="status"></p>
+    <ul id="search-results"></ul>
+  </section>
+  <section>
+    <h2>最近日报</h2>
+    <div class="post-list">{sorted.slice(0, 7).map(post => <a href={`/daily/${post.id}`}><time>{post.data.date}</time><span>{post.data.title}</span></a>)}</div>
+  </section>
+  <nav aria-label="按月浏览历史日报">
+    <h2>历史归档</h2>
+    <div class="months">{months.map(month => <a href={`/archive/${month}`}>{month}</a>)}</div>
+  </nav>
 </Layout>
-
 <style>
-  .hero {
-    margin-bottom: 2rem;
-  }
-
-  .hero h1 {
-    margin-top: 0;
-    font-size: 2rem;
-  }
-
-  .subtitle {
-    color: var(--color-text-muted);
-    font-size: 1.1rem;
-  }
-
-  .meta {
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
-  }
-
-  .empty {
-    text-align: center;
-    padding: 3rem 0;
-    color: var(--color-text-muted);
-  }
-
-  .post-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .post-card {
-    display: block;
-    padding: 1rem 1.25rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    text-decoration: none;
-    transition: border-color 0.2s;
-  }
-
-  .post-card:hover {
-    border-color: var(--color-accent);
-    text-decoration: none;
-  }
-
-  .post-card time {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    font-family: monospace;
-  }
-
-  .post-card h2 {
-    font-size: 1rem;
-    color: var(--color-text);
-    margin: 0.25rem 0 0;
-    border: none;
-    padding: 0;
-  }
+  h1 { font-size: 2rem; }
+  .hero { margin-bottom: 1.5rem; }
+  .hero p, time { color: var(--color-text-muted); }
+  .latest { padding: 1.25rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; }
+  .latest h2 { border: 0; margin-top: .25rem; }
+  li { margin: .6rem 0; line-height: 1.8; }
+  input { box-sizing: border-box; display: block; width: 100%; margin-top: .5rem; padding: .8rem; font: inherit; color: var(--color-text); background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 8px; }
+  .post-list { display: grid; gap: .5rem; }
+  .post-list a { display: grid; gap: .25rem; padding: 1rem; border: 1px solid var(--color-border); border-radius: 8px; }
+  .months { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .months a { padding: .4rem .8rem; background: var(--color-surface); border-radius: 6px; }
 </style>
+<script>
+  interface SearchEntry { url: string; date: string; title: string; text: string }
+  let index: Promise<SearchEntry[]> | undefined;
+  const query = document.querySelector<HTMLInputElement>('#news-query')!;
+  const results = document.querySelector<HTMLUListElement>('#search-results')!;
+  const status = document.getElementById('search-status')!;
+  let revision = 0;
+  let timer: ReturnType<typeof setTimeout>;
+  query.addEventListener('input', () => {
+    const current = ++revision;
+    clearTimeout(timer);
+    results.replaceChildren();
+    const term = query.value.trim().toLocaleLowerCase();
+    if (!term) { status.textContent = ''; return; }
+    status.textContent = '正在查找…';
+    timer = setTimeout(async () => {
+      try {
+        index ??= fetch('/search-index.json').then(response => {
+          if (!response.ok) throw new Error('Search index unavailable');
+          return response.json();
+        });
+        const entries = await index;
+        if (current !== revision) return;
+        const matches = entries.filter(entry => term.split(/\s+/).every(word => entry.text.includes(word)));
+        status.textContent = `找到 ${matches.length} 份日报${matches.length > 30 ? '，显示最近 30 份，请细化关键词' : ''}`;
+        for (const entry of matches.slice(0, 30)) {
+          const li = document.createElement('li');
+          const link = document.createElement('a');
+          link.href = entry.url;
+          link.textContent = `${entry.date} · ${entry.title}`;
+          li.append(link); results.append(li);
+        }
+      } catch {
+        index = undefined;
+        if (current === revision) status.textContent = '搜索暂时不可用，请稍后重试或按月浏览。';
+      }
+    }, 180);
+  });
+</script>

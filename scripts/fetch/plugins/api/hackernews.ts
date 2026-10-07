@@ -1,6 +1,7 @@
 import type { SourcePlugin, SourceConfig, Article } from '../../types.js';
 import { proxyFetch } from '../../../proxy.js';
 import * as cheerio from 'cheerio';
+import { mapLimit, setting, reportDate } from '../../../lib/runtime.js';
 
 interface AlgoliaHit {
   objectID: string;
@@ -27,7 +28,7 @@ const hackernewsPlugin: SourcePlugin = {
   async fetch(config: SourceConfig): Promise<Article[]> {
     const maxItems = config.maxItems ?? 15;
 
-    const oneDayAgo = Math.floor(Date.now() / 1000) - 86400;
+    const oneDayAgo = Math.floor(new Date(`${reportDate()}T00:00:00+08:00`).getTime() / 1000) + 86400 - setting('LOOKBACK_HOURS', 48, 8760) * 3600;
     const url = `${ALGOLIA_API}/search?tags=story&hitsPerPage=${maxItems}&numericFilters=created_at_i>${oneDayAgo},points>5`;
 
     const res = await proxyFetch(url);
@@ -45,7 +46,7 @@ const hackernewsPlugin: SourcePlugin = {
       .filter(hit => hit.title)
       .sort((a, b) => b.points - a.points);
 
-    const articles = sorted.map(hit => ({
+    const articles: Article[] = sorted.map(hit => ({
       title: hit.title,
       url: hit.url ?? `https://news.ycombinator.com/item?id=${hit.objectID}`,
       content: hit.story_text || `Score: ${hit.points} | Comments: ${hit.num_comments}`,
@@ -56,14 +57,14 @@ const hackernewsPlugin: SourcePlugin = {
     }));
 
     // Concurrently fetch the contents of external websites
-    await Promise.all(articles.map(async (article) => {
+    await mapLimit(articles, setting('FETCH_CONCURRENCY', 3, 20), async (article) => {
       if (article.content.startsWith('Score:')) {
         try {
           const res = await proxyFetch(article.url, {
-            signal: AbortSignal.timeout(6000),
+            timeoutMs: 6000,
             headers: { 'User-Agent': 'AI-News-Bot/1.0' },
             retries: 1,
-          } as any);
+          });
           if (res.ok) {
             const html = await res.text();
             const $ = cheerio.load(html);
@@ -74,6 +75,7 @@ const hackernewsPlugin: SourcePlugin = {
               .join('\n\n');
 
             if (textContent.length > 100) {
+              article.body = textContent;
               article.content = textContent.slice(0, 13000);
             }
           }
@@ -81,7 +83,7 @@ const hackernewsPlugin: SourcePlugin = {
           console.warn(`[hackernews] Could not fetch content for ${article.url}:`, String(err));
         }
       }
-    }));
+    });
 
     return articles;
   },

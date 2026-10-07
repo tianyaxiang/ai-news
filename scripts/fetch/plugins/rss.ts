@@ -2,6 +2,7 @@ import RSSParser from 'rss-parser';
 import * as cheerio from 'cheerio';
 import type { SourcePlugin, SourceConfig, Article } from '../types.js';
 import { proxyFetch } from '../../proxy.js';
+import { reportDate, setting } from '../../lib/runtime.js';
 
 const rssPlugin: SourcePlugin = {
   name: 'rss',
@@ -28,6 +29,12 @@ const rssPlugin: SourcePlugin = {
     const maxItems = config.maxItems ?? 10;
 
     const articles: Article[] = feed.items
+      .filter(item => {
+        if (!item.isoDate && !item.pubDate) return true;
+        const timestamp = new Date(item.isoDate || item.pubDate!).getTime();
+        const end = new Date(`${reportDate()}T00:00:00+08:00`).getTime() + 86400000;
+        return timestamp >= end - setting('LOOKBACK_HOURS', 48, 8760) * 3600000 && timestamp < end;
+      })
       .slice(0, maxItems)
       .map(item => {
         let textContent = item.contentSnippet ?? '';
@@ -49,7 +56,8 @@ const rssPlugin: SourcePlugin = {
           title: item.title ?? 'Untitled',
           url: item.link ?? '',
           content: textContent,
-          date: item.pubDate ? new Date(item.pubDate) : new Date(),
+          date: new Date(item.isoDate || item.pubDate || Date.now()),
+          dateKnown: Boolean(item.isoDate || item.pubDate),
           source: config.name,
           author,
           tags,

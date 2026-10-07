@@ -1,2 +1,2 @@
-export { getModel, aiGenerate } from './provider.js';
-export { buildDailyPrompt } from './prompts.js';
+export { getModel, aiGenerate, aiJson } from './provider.js';
+export { buildSummaryPrompt, buildHighlightsPrompt } from './prompts.js';

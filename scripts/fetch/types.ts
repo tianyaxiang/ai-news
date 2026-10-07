@@ -7,6 +7,10 @@ export interface Article {
   content: string;
   /** Publish date */
   date: Date;
+  /** False when the source has no publication timestamp. */
+  dateKnown?: boolean;
+  /** Reusable extracted article body, distinct from a feed summary. */
+  body?: string;
   /** Source name (e.g. "Hacker News") */
   source: string;
   /** Content language (e.g. "en", "zh") */
