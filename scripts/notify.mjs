@@ -12,6 +12,8 @@
  *   RUN_URL       - Optional. The GitHub Actions run URL (used on failure).
  */
 
+import { readFile } from 'node:fs/promises';
+
 const [, , status = 'success'] = process.argv;
 
 const webhookUrl = process.env.WEBHOOK_URL;
@@ -26,7 +28,7 @@ if (!webhookUrl) {
 }
 
 /** Build request body based on webhook type */
-function buildPayload(type, status, weather = '') {
+function buildPayload(type, status, weather = '', highlights = '') {
   const isSuccess = status === 'success';
   const isStart = status === 'start';
   let title = '';
@@ -65,6 +67,7 @@ function buildPayload(type, status, weather = '') {
       ``,
       `日期: ${reportDate}`,
       dailyUrl ? `今日日报: ${dailyUrl}` : '',
+      highlights ? `\n今日要点\n${highlights.replace(/\*\*(.*?)\*\*/g, '$1')}` : '',
     ].filter(Boolean);
 
     markdownLines = [
@@ -72,6 +75,7 @@ function buildPayload(type, status, weather = '') {
       ``,
       `日期: ${reportDate}`,
       dailyUrl ? `今日日报: [查看日报](${dailyUrl})` : '',
+      highlights ? `\n**今日要点**\n${highlights}` : '',
     ].filter(Boolean);
   } else {
     textLines = [
@@ -151,6 +155,20 @@ function buildPayload(type, status, weather = '') {
       };
   }
 }
+async function getHighlights() {
+  try {
+    const report = await readFile(
+      new URL(`../src/content/daily/${reportDate}.md`, import.meta.url),
+      'utf8',
+    );
+    const section = report.match(/^##[ \t]+今日要点[ \t]*\r?\n([\s\S]*?)(?=^#{1,2}[ \t]+|^[ \t]*---[ \t]*\r?$|(?![\s\S]))/m);
+    return section?.[1].trim() || '';
+  } catch (err) {
+    console.warn(`[notify] Could not read today's highlights: ${err instanceof Error ? err.message : err}`);
+    return '';
+  }
+}
+
 async function getWeather() {
   try {
     const res = await fetch('https://wttr.in/Beijing?format=%c+%t&m');
@@ -169,7 +187,8 @@ async function main() {
     weather = await getWeather();
   }
 
-  const payload = buildPayload(webhookType, status, weather);
+  const highlights = status === 'success' ? await getHighlights() : '';
+  const payload = buildPayload(webhookType, status, weather, highlights);
 
   console.log(`[notify] Sending ${status} notification via ${webhookType} webhook...`);
 
