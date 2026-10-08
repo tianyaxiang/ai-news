@@ -10,7 +10,7 @@ const topics = [...new Set(articles.map(article => article.topic))];
 <section class="highlights">
   <p>{date} · {articles.length} 篇资讯</p>
   <h1>今日要点</h1>
-  {highlights.length ? <ul>{highlights.map(text => <li>{text}</li>)}</ul> : <p>暂无足够正文提炼要点，请查看下方原文链接。</p>}
+  {highlights.length ? <ul>{highlights.map(text => <li>{text}</li>)}</ul> : <p>今日要点暂不可用，请查看下方文章与原文链接。</p>}
 </section>
 <div class="filters">
   <label>筛选主题 <select id="article-topic"><option value="">全部主题</option>{topics.map(topic => <option>{topic}</option>)}</select></label>

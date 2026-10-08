@@ -97,17 +97,87 @@ test('generation preserves every selected article and writes structured data wit
   } finally { await rm(dir, { recursive: true, force: true }); }
 });
 
-test('all-source failure and invalid model output never publish a report', async () => {
+test('all-source failure is fatal but malformed summaries preserve source links in a partial report', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'news-failure-'));
   try {
     await assert.rejects(generateDaily([{ ...result([])[0], error: 'offline' }], dir, '2026-10-07'), /All news sources/);
-    await assert.rejects(generateDaily(result([article()]), dir, '2026-10-07', {
+    const partial = await generateDaily(result([article()]), dir, '2026-10-07', {
       loadHistory: async () => ({ translations: new Map(), published: new Set() }),
       crawlAndTranslateArticle: async () => null,
       aiJson: async (_prompt, validate) => validate({ articles: [] }),
-    }), /count mismatch/);
-    await assert.rejects(readFile(join(dir, '2026-10-07.md')), { code: 'ENOENT' });
-    const empty = await generateDaily(result([]), dir, '2026-10-07');
+    });
+    assert.equal(partial.status, 'partial');
+    assert.deepEqual(partial.missingSummaryIds, [0]);
+    assert.match(await readFile(partial.file!, 'utf8'), /摘要暂不可用/);
+    const empty = await generateDaily(result([]), dir, '2026-10-08');
     assert.equal(empty.status, 'no-content');
+  } finally { await rm(dir, { recursive: true, force: true }); }
+});
+
+test('an incomplete batch repairs missing articles instead of aborting the daily report', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'news-incomplete-'));
+  try {
+    let attempts = 0;
+    const row = (id: number) => ({ id, titleZh: `标题 ${id}`, summary: `来源支持的摘要 ${id}`, topic: '其他' });
+    const generated = await generateDaily(result([article(), article({ url: 'https://example.com/second' })]), dir, '2026-10-07', {
+      loadHistory: async () => ({ translations: new Map(), published: new Set() }),
+      crawlAndTranslateArticle: async () => null,
+      aiJson: async (prompt, validate) => {
+        if (prompt.includes('"highlights"')) return validate({ highlights: [{ text: '要点一', articleIds: [0] }, { text: '要点二', articleIds: [1] }] });
+        attempts++;
+        if (attempts === 1) return validate({ articles: [row(0)] });
+        const inputs = JSON.parse(prompt.split('\n').at(-1)!);
+        return validate({ articles: inputs.map((input: { id: number }) => row(input.id)) });
+      },
+    });
+    assert.equal(generated.articleCount, 2);
+    assert.match(await readFile(generated.file!, 'utf8'), /来源支持的摘要 1/);
+  } finally { await rm(dir, { recursive: true, force: true }); }
+});
+
+test('duplicate, unknown and invalid summary IDs do not overwrite valid results', async () => {
+  const { collectSummaries } = await import('../scripts/ai/summaries.js');
+  const row = (id: number) => ({ id, titleZh: '标题', summary: '来源摘要', topic: '其他' });
+  assert.deepEqual(collectSummaries({ articles: [row(0), row(1), row(1), row(99), { ...row(2), summary: '' }] }, [0, 1, 2]).map(row => row.id), [0]);
+});
+
+test('malformed highlights fall back to validated summaries without inventing content', async () => {
+  const { AiOutputError } = await import('../scripts/ai/provider.js');
+  const dir = await mkdtemp(join(tmpdir(), 'news-highlights-'));
+  try {
+    const generated = await generateDaily(result([article()]), dir, '2026-10-07', {
+      loadHistory: async () => ({ translations: new Map(), published: new Set() }),
+      crawlAndTranslateArticle: async () => null,
+      aiJson: async (prompt, validate) => {
+        if (prompt.includes('"highlights"')) throw new AiOutputError('Invalid highlight count');
+        return validate({ articles: [{ id: 0, titleZh: '标题', summary: '经过验证的来源摘要。', topic: '其他' }] });
+      },
+    });
+    assert.equal(generated.highlightsFallback, true);
+    assert.equal(generated.status, 'partial');
+    assert.match(await readFile(generated.file!, 'utf8'), /^highlights: \["经过验证的来源摘要。"\]/m);
+  } finally { await rm(dir, { recursive: true, force: true }); }
+});
+
+test('121-article replay recovers omitted rows without re-requesting valid IDs', async () => {
+  const dir = await mkdtemp(join(tmpdir(), 'news-replay-'));
+  const completed = new Set<number>();
+  try {
+    const input = Array.from({ length: 121 }, (_, id) => article({ title: `Story ${id}`, url: `https://example.com/story?id=${id}` }));
+    const generated = await generateDaily(result(input), dir, '2026-10-07', {
+      loadHistory: async () => ({ translations: new Map(), published: new Set() }),
+      crawlAndTranslateArticle: async () => null,
+      aiJson: async (prompt, validate) => {
+        if (prompt.includes('"highlights"')) return validate({ highlights: [0, 1, 2].map(id => ({ text: `要点 ${id}`, articleIds: [id] })) });
+        const inputs = JSON.parse(prompt.split('\n').at(-1)!) as { id: number }[];
+        for (const { id } of inputs) assert.equal(completed.has(id), false, `valid ID ${id} was requested again`);
+        const returned = inputs.length > 1 ? inputs.slice(0, -1) : inputs;
+        returned.forEach(({ id }) => completed.add(id));
+        return validate({ articles: returned.map(({ id }) => ({ id, titleZh: `标题 ${id}`, summary: `摘要 ${id}`, topic: '其他' })) });
+      },
+    });
+    assert.equal(generated.articleCount, 121);
+    assert.equal(completed.size, 121);
+    assert.deepEqual(generated.missingSummaryIds, []);
   } finally { await rm(dir, { recursive: true, force: true }); }
 });

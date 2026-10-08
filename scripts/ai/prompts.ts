@@ -10,7 +10,7 @@ export function buildSummaryPrompt(articles: { id: number; article: Article }[])
 
 export function validateSummaries(value: unknown, ids: number[]): Summary[] {
   const rows = (value as { articles?: unknown[] })?.articles;
-  if (!Array.isArray(rows) || rows.length !== ids.length) throw new Error('Summary count mismatch');
+  if (!Array.isArray(rows) || rows.length !== ids.length) throw new Error(`Summary count mismatch: expected ${ids.length} articles (ids: ${ids.join(',')}), received ${Array.isArray(rows) ? rows.length : 'no articles array'}`);
   const seen = new Set<number>();
   for (const row of rows) {
     const item = row as Summary;
