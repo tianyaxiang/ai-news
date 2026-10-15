@@ -1,0 +1,42 @@
+---
+title: "Fixing C Strings With String Views"
+originalUrl: "https://eliasebner.com/blog/guides/fixing-strings-in-c/"
+date: "2026-10-14T21:04:44.000Z"
+excerpt: true
+---
+
+> 本文为原文前 6,000 字符的节选翻译，完整内容请查看原文。
+
+# Fixing C Strings With String Views
+
+Sep 7, 2026 Why C Strings Suck And How I Fixed Them. I have always been frustrated about C not having a proper String type that most modern languages have nowadays. I love the simplicity of C, but there are some features that I would really like to have in it, and this is one of them. Since I made a small library (just one .c file) that you can use to make the experience of working with strings in C just a little better, I would like to show it to you here. For the impatient, this is the general idea: `struct str_view { const u8 *data; usize len; }; struct str_owned { u8 *data; usize len; };` But before getting into the library itself, I will go over how “strings” work in C and why I find them annoying, what the issues are with this model, and then it will be easier to explain why I decided to take the route that I took. If you only care about the actual implementation details, you can click here.
+
+2026年9月7日，为什么C语言字符串很糟糕以及我是如何修复它们的。我一直对C语言没有现代编程语言中常见的标准字符串类型感到沮丧。我热爱C语言的简洁，但它确实缺少一些我非常想要的功能，而这正是其中之一。由于我编写了一个小型库（仅包含一个.c文件），可以让你在C语言中处理字符串的体验变得更好一些，我想在这里向大家展示它。对于没耐心的读者，核心思想如下：`struct str_view { const u8 *data; usize len; }; struct str_owned { u8 *data; usize len; };` 在深入介绍库本身之前，我将先回顾C语言中“字符串”的工作原理，说明为什么我觉得它们很烦人，探讨这种模型存在的问题，这样更容易解释我为何选择现在的方案。如果你只关心具体的实现细节，可以点击这里。
+
+How Strings Work in C. As many might already know, strings in C are NUL-terminated. NUL is an ASCII character which, in the context of ASCII encoding, literally corresponds to the value 0. In C, this character is represented by '\0'. Inside a text, it generally does not carry any semantic meaning, so it will never be used inside the text for the sake of carrying information (as opposed to letters like 'a' or 'y'). C does not really have “strings” per se. It only has arrays. These arrays are simply chunks of data where you can put things. To understand where the array ends, one has two options: Store the length of the data somewhere, or put something at the end of the array to signify its end. C went with the second option.
+
+C语言中字符串的工作原理。正如许多人可能已经知道的那样，C语言中的字符串是以NUL结尾的。NUL是一个ASCII字符，在ASCII编码中，它字面上对应的值为0。在C语言中，该字符表示为'\0'。在文本内部，它通常不携带任何语义含义，因此永远不会为了承载信息而出现在文本中（与字母'a'或'y'不同）。C语言本身并没有真正的“字符串”，它只有数组。这些数组仅仅是你可以放置数据的数据块。为了确定数组在哪里结束，有两种选择：在某处存储数据的长度，或者在数组末尾放置一个标记来表示结束。C语言选择了第二种方案。
+
+Since “strings” (which are not really strings) in C are simply arrays of characters, each string has a NUL-terminator at the end of it. C is a very old language and back then - when it was first created - this seemed like a good idea. Storing the length of the data separately required more memory than a NUL-character at the end. A NUL-character in ASCII encoding is 8 bits (or 1 byte). If you tried to store the length of the data in only 8 bits, you could only have strings that are up to 255 characters in length, which is obviously too short. Bigger numbers require more data to store, so we’re talking about around 4 to 8 bytes instead of 1. But this is not even the main reason - the main reason is because of simplicity. Back when C was created, there existed some languages that already had strings with a separately stored length. C just wanted to be as simple as possible, and having NUL-terminated character arrays seemed like a sane decision.
+
+由于C语言中的“字符串”（实际上并非真正的字符串）仅仅是字符数组，每个字符串末尾都有一个NUL终止符。C语言是一门非常古老的语言，在它最初被创建时，这似乎是个好主意。单独存储数据长度所需的内存比在末尾加一个NUL字符要多。ASCII编码中的NUL字符占用8位（即1字节）。如果你尝试仅用8位来存储数据长度，那么字符串长度最多只能达到255个字符，这显然太短了。更大的数字需要更多的数据来存储，所以我们讨论的是4到8字节，而不是1字节。但这甚至不是主要原因——主要原因是出于简洁性。在C语言诞生时，已经存在一些使用单独存储长度的字符串的语言。C语言只是想尽可能保持简单，而使用NUL结尾的字符数组看起来是一个合理的决定。
+
+The Problems With This Approach. There are multiple issues with this. First Issue: First of all, if you want to find out the length of a string, with a NUL-terminated string you have to start at index 0 and start counting until you reach the end of the data. This process has a time complexity of O(n), as opposed to O(1) for just reading the separately stored length. This is fine for short character arrays, but imagine you had to figure out the length of a 1,000,000 character text. That would take a considerable amount of CPU cycles that could have been used for something else. This bothers me especially in a language like C, since it is supposed to give you some of the best performance that programming languages have to offer. C is often the baseline when comparing languages to gauge their relative performance. Why, if C focuses so much on performance, would you settle for this?
+
+这种方法存在的问题。这有多个问题。第一个问题：首先，如果你想获取字符串的长度，对于NUL结尾的字符串，你必须从索引0开始计数，直到到达数据末尾。这个过程的时间复杂度为O(n)，而直接读取单独存储的长度只需O(1)。对于短字符数组来说这没问题，但想象一下，如果你必须计算一个包含1,000,000个字符的文本长度。那将消耗大量的CPU周期，而这些周期本可以用于其他用途。这在C语言中尤其让我困扰，因为它本应提供编程语言中最好的性能。在比较语言以衡量其相对性能时，C语言通常是基准。如果C语言如此注重性能，为什么要满足于此呢？
+
+Second Issue: Let us assume that we have some C-string `some_str`: `char *some_str = "Hello World";`. This is great, but now I would like to work with the second word specifically (World). I do not care about changing the data, just about reading. Maybe I want to pass it to a function or something. Well, I could do something like this: `char *only_world = some_str + 6;`. By doing this, we are reusing the NUL-terminator that `some_str` was using to terminate itself. Fine, what if I want to access the first word only, though? Now we have a problem. We somehow have to end the string at the fifth index. To do that, we would have to insert a NUL-character at index 6. By doing so, we are changing the data that `some_str` is pointing to, and we can therefore not use that variable anymore.
+
+第二个问题：假设我们有一个C字符串 `some_str`：`char *some_str = "Hello World";`。这很好，但现在我想专门处理第二个单词（World）。我不关心修改数据，只关心读取。也许我想把它传递给一个函数之类的。好吧，我可以这样做：`char *only_world = some_str + 6;`。通过这样做，我们重用了 `some_str` 原本用于终止自身的NUL终止符。没问题，但如果我只想访问第一个单词呢？现在我们遇到了问题。我们必须以某种方式在第五个索引处结束字符串。为了做到这一点，我们必须在索引6处插入一个NUL字符。这样做会改变 `some_str` 指向的数据，因此我们不能再使用那个变量了。
+
+So, what do we do? We have to copy the string. That’s slow, since it involves memory lookups. We have to allocate to memory, and then copy it. We can also use the stack if we know the size of the data at compile time, but that is often not the case. That would look like this: `char *only_hello = malloc(6); memcpy(only_hello, some_str, 5); only_hello[5] = 0;`. In this simple example, the stack would have been fine, but in most realistic scenarios, we have to use heap allocations. This problem is solved by so-called “string views”, which are basically immutable data and a length. You can just give the string view the same pointer as `some_str` and decrease the length to whatever you need, 5 in this case.
+
+那么，我们该怎么办？我们必须复制字符串。这很慢，因为它涉及内存查找。我们必须分配内存，然后进行复制。如果我们能在编译时知道数据大小，也可以使用栈，但这通常是不可能的。代码看起来会是这样：`char *only_hello = malloc(6); memcpy(only_hello, some_str, 5); only_hello[5] = 0;`。在这个简单的例子中，使用栈是可以的，但在大多数现实场景中，我们必须使用堆分配。这个问题可以通过所谓的“字符串视图”（string views）来解决，它们本质上是不可变数据和长度的组合。你可以直接给字符串视图提供与 `some_str` 相同的指针，并将长度减小到你需要的数值，在本例中为5。
+
+Third Issue: God forbid you forget to NUL-terminate a string. If you pass a pointer to a non-NUL-terminated string to a function in `string.h`, like `strlen`, the computer will just keep counting characters until it either randomly finds a NUL-character or - alternatively - until it tries to access a region of memory that it should not touch and the operating system kills the process. This generally does not happen with actual strings (or string views), since you will use functions to interact with them, and they always keep the length of the string in sync with the data. In that case you always know when the string stops, you do not have to rely on remembering to NUL-terminate all your strings.
+
+第三个问题：千万别忘了给字符串添加NUL终止符。如果你将一个非NUL结尾的字符串指针传递给 `string.h` 中的函数（如 `strlen`），计算机将持续计数，直到随机找到一个NUL字符，或者尝试访问不该触碰的内存区域导致操作系统终止该进程。这种情况在使用真正的字符串（或字符串视图）时通常不会发生，因为你会使用函数来与它们交互，而这些函数总是保持字符串长度与数据同步。在这种情况下，你总是知道字符串何时结束，而不必依赖于记住给所有字符串添加NUL终止符。
+
+Other Issues: There are probably more issues, but these are hopefully enough to convince you. In general, I find strings with a separately stored length more intuitive and easier to work with. The Solution: Luckily, strings...
+
+其他问题：可能还有更多问题，但希望这些已经足以说服你了。总的来说，我觉得单独存储长度的字符串更直观，也更容易处理。解决方案：幸运的是，字符串……
