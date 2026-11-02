@@ -1,0 +1,24 @@
+---
+title: "Work on GEFS (the Good Enough File System) for OpenBSD progresses"
+originalUrl: "https://www.undeadly.org/cgi?action=article;sid=20261101115637"
+date: "2026-11-01T20:13:29.000Z"
+excerpt: false
+---
+
+# Work on GEFS (the Good Enough File System) for OpenBSD progresses
+
+Contributed by Peter N. M. Hansteen on 2026-11-01 from the most excellent file shredder dept. As previously reported, Ori Bernstein is working on GEFS, the "Good Enough File System" imported to OpenBSD, and his EuroBSDCon 2026 presentation was very well received. In fact, the video is among the most frequently played from the conference. Now Ori has followed up with more evolved code that includes several important steps towards makin the new file system fit for general use.
+
+本文由 Peter N. M. Hansteen 于 2026 年 11 月 1 日从极其出色的文件粉碎部门投稿。正如之前报道的那样，Ori Bernstein 正在致力于将“足够好的文件系统”（GEFS）移植到 OpenBSD，他在 EuroBSDCon 2026 上的演讲受到了热烈欢迎。事实上，该视频是会议中播放次数最多的视频之一。现在，Ori 带来了更成熟的代码，其中包含了几项使该新文件系统适合通用目的的重要进展。
+
+In a message to tech@, Ori writes: List: openbsd-tech Subject: Re: GEFS on OpenBSD: A very early preview From: ori () eigenstate ! org Date: 2026-10-31 17:08:42 So, it's probably time for a few updates. First off, thanks to Martijn, and everyone else who tried it out and sent patches. Everything is updated and rebased, and the diff has been regenerated with all of the lastest. I've gone through a the error handling code. In theory the filesystem will handle errors mostly correctly. There are probably still places where theory diverges from reality. I've also forward ported most of the important bugfixes from 9front. The file system now leaves the first FS block unused by default -- we can put disklabels there, which makes it hard to put the superblock there as well. Some userspace tools have been done (you can now mkfs on openbsd!), but snapshot control hasn't. I'm thinking we have a userspace 'gefs' program that lets you handle this, trying to keep the interface similar to the 9front ctl file.
+
+Ori 在给 tech@ 的邮件中写道：列表：openbsd-tech 主题：回复：OpenBSD 上的 GEFS：一个非常早期的预览 发件人：ori () eigenstate ! org 日期：2026-10-31 17:08:42 是时候进行一些更新了。首先，感谢 Martijn 以及所有尝试并发送补丁的人。所有内容都已更新并重新基于最新版本，diff 文件也已根据最新进展重新生成。我已经检查了错误处理代码。理论上，该文件系统可以基本正确地处理错误，但理论与现实之间可能仍存在偏差。我还从 9front 向前移植了大部分重要的错误修复。该文件系统现在默认不使用第一个 FS 块——我们可以在那里放置磁盘标签（disklabels），这也使得将超级块放在那里变得困难。一些用户空间工具已经完成（你现在可以在 OpenBSD 上执行 mkfs 了！），但快照控制尚未完成。我考虑编写一个用户空间程序 'gefs' 来处理这些，并尽量保持其接口与 9front 的 ctl 文件相似。
+
+The commands below should suffice: gefs debug [0|1] gefs usereserve gefs retain snap timespec gefs snap name newname gefs fork name newname The consistency protocol is still the biggest missing piece; I've been reading the old code for softupdates, since it had the same flavor of problem. what gefs wants, in the ideal case, is some way to put ordering barriers in the commit phases, while still accepting new block i/o, something like the following sequence of steps: 0) normal use, generate dirty blocks and write back in any order. holding mutlk { 1) barrier(), ensure that all blocks written before the commit will be on disk before the commit finishes 2) enqueue free list/deadlist data 3) prepare arena header/footer + superblock } 4) enqueue arena headers 5) barrier() 6) enqueue superblock 7) enqueue arena footers 8) wait for enqueued blocks to hit disk 9) free blocks no longer used by previous gen
+
+以下命令应该足够了：gefs debug [0|1]、gefs usereserve、gefs retain snap timespec、gefs snap name newname、gefs fork name newname。一致性协议仍然是缺失的最大部分；我一直在阅读 softupdates 的旧代码，因为它面临着类似的问题。在理想情况下，gefs 需要一种在提交阶段设置排序屏障的方法，同时仍能接受新的块 I/O，类似于以下步骤序列：0) 正常使用，生成脏块并以任意顺序写回。持有互斥锁 { 1) barrier()，确保提交前写入的所有块在提交完成前已在磁盘上 2) 将空闲列表/死列表数据入队 3) 准备区域头/尾 + 超级块 } 4) 将区域头入队 5) barrier() 6) 将超级块入队 7) 将区域尾入队 8) 等待入队的块写入磁盘 9) 释放前一代不再使用的块。
+
+on 9front, I have a priority queue of blocks that are sorted by (gen, addr) tuples, which means that writes within a generation are flushed to disk as sequentially as they can be, while not crossing generation boundaries. I'm currently thinking I'll implement the same in OpenBSD -- launch syncer kprocs that do synchronous I/O to the block device. If we kick things out of cache and write it back to disk early, that should generally be safe -- The only blocks the buffer cache must not reorder are the arena headers and superblocks, so a flag to pin them unwritten may be all that's needed here. I'm open to other ideas, though. Quoth ori@eigenstate.org: Followed by a quoted part of the previous message that has the links to the code and documentation. If you are as excited as we are about this new file system development and are in a position to test, please do.
+
+在 9front 上，我有一个按 (gen, addr) 元组排序的块优先级队列，这意味着同一代内的写入会尽可能按顺序刷新到磁盘，同时不会跨越代边界。我目前考虑在 OpenBSD 中实现同样的功能——启动执行块设备同步 I/O 的同步内核进程（syncer kprocs）。如果我们尽早将数据从缓存中移出并写回磁盘，这通常是安全的——缓冲区缓存唯一不能重新排序的块是区域头和超级块，因此可能只需要一个标志来锁定它们不被写入即可。不过，我也欢迎其他想法。Ori@eigenstate.org 引用了之前邮件中包含代码和文档链接的部分。如果您和我们一样对这个新文件系统的开发感到兴奋，并且有条件进行测试，请务必参与。
